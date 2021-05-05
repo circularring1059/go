@@ -22,7 +22,7 @@ func main() {
 
 	//使用 "_"  分割数字
 
-	var number4 int = 1_2_3
+	var number4 int = 1_2_3 // number4  等于十进制的123
 
 	fmt.Println(number4)
 
