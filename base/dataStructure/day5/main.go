@@ -29,10 +29,11 @@ func main() {
 	fmt.Print(str4, "\n")
 	fmt.Println("--------")
 	/*
-	one
-		two
-		three
-		four
-	--------
+		one
+			two
+			three
+			four
+		--------
 	*/
+	//反引号间换行将被作为字符串中的换行，但是所有的转义字符均无效，文本将会原样输出。
 }
