@@ -7,7 +7,7 @@ func myfunc() (int, string) {
 }
 
 func main() {
-	number, _ := myfunc()
+	number, _ := myfunc() // _  接收匿名变量，占位，不占内存
 	fmt.Println(number)
 
 }

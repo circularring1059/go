@@ -25,6 +25,12 @@ const (
 
 )
 
+const (
+	day1 = "day1"
+	day2 //  day2="day1"
+	day3 //  day3="day1"
+)
+
 func main() {
 	//关键字 const  定义常量（只读属性）
 	const name string = "google.com" //用双引号
@@ -37,4 +43,6 @@ func main() {
 	fmt.Println(a, b, c)
 
 	fmt.Println(d, e, f, g, h, k)
+
+	fmt.Println(day1, day2, day3)
 }
