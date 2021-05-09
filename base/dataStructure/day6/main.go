@@ -70,6 +70,7 @@ func main() {
 
 	// join 和python 差不多
 	// str1 = taobao.com
-	fmt.Println(strings.Join(str7, "+")) // ？
-	fmt.Println(strings.Join(str7, ""))  // ？
+	fmt.Println(strings.Join(str7, "+")) // ？ D+:+\+l+a+n+g+u+a+g+e+\+g+o+\+g+o+\+s+r+c
+	fmt.Println(strings.Join(str7, ""))  // ？D:\language\go\go\src
+
 }
