@@ -70,7 +70,7 @@ func main() {
 	switch number4 := 7; {
 	case number4 > 2:
 		fmt.Println("number4 > 2")
-		fallthrough // 加上fallthrouch 会执行下一个case,不管条件是否满足  兼顾c语言
+		fallthrough // 加上fallthrouch 会执行下一个case,不管条件是否满足  兼顾c语言，用的不多
 	case number4 > 18:
 		fmt.Println("number4 > 18")
 	default:
@@ -125,4 +125,15 @@ func main() {
 	// 标签
 breakTag:
 	fmt.Println("结束for循环")
+
+	//for range
+	var str1 = "hell0"
+	for i, v := range str1 {
+		fmt.Println(i, v)     // v 是一个字符，打印出来是unicode 编码后的数字
+		fmt.Printf("%c\n", v) // %c  显示该字符
+	}
+
+	for i := 0; i < len(str1); i++ {
+		fmt.Printf("%c\n", str1[i])
+	}
 }
