@@ -15,7 +15,7 @@ func main() {
 	}
 
 	fmt.Println("--------------")
-	for ; j < 15; j++ {
+	for j < 15 {
 		fmt.Println(j)
 		j++
 	}
