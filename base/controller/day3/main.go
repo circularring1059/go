@@ -48,4 +48,81 @@ func main() {
 		fmt.Print(number5)
 		number5++
 	}
+
+	// swith
+	switch number4 := 7; number4 {
+	case 1:
+		fmt.Println("number4=1")
+	case 2:
+		fmt.Println("number4=2")
+	case 7:
+		fmt.Println("number4=7")
+	case 5, 6, 3, 4:
+		fmt.Println("numbe4 in 5,6,3,4")
+	//case number4 > 2:  //error
+	//	fmt.Println("number4 > 2")
+	//case 2: 不能再写上面已有的
+	// 	fmt.Print("")
+	default:
+		fmt.Println("default")
+	}
+
+	switch number4 := 7; {
+	case number4 > 2:
+		fmt.Println("number4 > 2")
+		fallthrough // 加上fallthrouch 会执行下一个case,不管条件是否满足  兼顾c语言
+	case number4 > 18:
+		fmt.Println("number4 > 18")
+	default:
+		fmt.Println("default")
+	}
+
+	//continue
+	for number6 := 0; number6 < 10; number6++ {
+		if number6 == 6 {
+			fmt.Println("continue")
+			continue
+		}
+		fmt.Println(number6)
+	}
+
+	//break
+	for number6 := 0; number6 < 10; number6++ {
+		if number6 == 6 {
+			fmt.Println("break")
+			break
+		}
+		fmt.Println(number6)
+	}
+
+	//双层循环时可以定义flag 跳出双循环
+	var breakFlag bool
+	for i := 0; i < 10; i++ {
+		for j := 0; j < 10; j++ {
+			if j == 2 {
+				// 设置退出标签
+				breakFlag = true
+				break
+			}
+			fmt.Printf("%v-%v\n", i, j)
+		}
+		// 外层for循环判断
+		if breakFlag {
+			break
+		}
+	}
+	// golang 里有个 goto 可以简化上述代码
+	for i := 0; i < 10; i++ {
+		for j := 0; j < 10; j++ {
+			if j == 2 {
+				// 设置退出标签
+				goto breakTag
+			}
+			fmt.Printf("%v-%v\n", i, j)
+		}
+	}
+	return
+	// 标签
+breakTag:
+	fmt.Println("结束for循环")
 }

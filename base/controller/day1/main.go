@@ -19,4 +19,9 @@ func main() {
 		fmt.Println(j)
 		j++
 	}
+
+	//无限循环
+	//for {
+	//	fmt.Println("endless")
+	//}
 }
