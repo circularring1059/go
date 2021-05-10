@@ -25,4 +25,27 @@ func main() {
 	var array6 = [5]int{0: 2, 1: 3, 2: 10, 3: 100, 4: 7}
 	fmt.Println(array6)
 
+	//二维数组
+	// var  array7  [3][2]int
+
+	// array7 = [3][2]int{
+	// 	{1,2},
+	// 	{3,4},
+	// 	{5,6},
+	// }
+
+	// for  k, v ：=  range  array7 {
+	// 	fmt.Print(v)
+	// }
+	a := [3][2]string{
+		{"北京", "上海"},
+		{"广州", "深圳"},
+		{"成都", "重庆"},
+	}
+	for _, v1 := range a {
+		for _, v2 := range v1 {
+			fmt.Printf("%s\t", v2)
+		}
+		fmt.Println()
+	}
 }
