@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 	//定义定长数组
@@ -24,6 +26,11 @@ func main() {
 
 	var array6 = [5]int{0: 2, 1: 3, 2: 10, 3: 100, 4: 7}
 	fmt.Println(array6)
+	sum := 0
+	for _, v := range array6 {
+		sum = sum + v
+	}
+	fmt.Printf("sum=%v\n", sum)
 
 	//二维数组
 	// var  array7  [3][2]int
@@ -48,4 +55,5 @@ func main() {
 		}
 		fmt.Println()
 	}
+	//  多维数组只有第一层可以使用...来让编译器推导数组长度.数组是值类型，不可变.
 }
