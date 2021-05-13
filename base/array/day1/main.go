@@ -6,11 +6,12 @@ import (
 
 var array9 = [...]int{1, 3, 4, 5}
 
+//数组是值类型，赋值和传参会复制整个数组。因此改变副本的值，不会改变本身的值
 func printArray(myarray [4]int) {
 	fmt.Println(myarray)
 	myarray[1] = 100
-	fmt.Println(myarray)
-	fmt.Println(array9)
+	fmt.Println(myarray) //  [1 100 4 5]
+	fmt.Println(array9)  // [1 3 4 5]
 }
 
 func main() {

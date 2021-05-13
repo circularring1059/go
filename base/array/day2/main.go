@@ -44,7 +44,4 @@ func main() {
 
 	slice5[0] = 9898    //修改值
 	fmt.Println(slice5) //[9898]
-
-	//sh
-
 }
