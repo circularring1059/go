@@ -42,7 +42,9 @@ func main() {
 	slice5 = append(slice5, 7878)
 	fmt.Printf("%v %d %d\n", slice5, len(slice5), cap(slice5)) //append  后自动开辟空间  [7878] 1 1
 
-	slice5[0] = 9898 //修改值
-	fmt.Println(slice5)
+	slice5[0] = 9898    //修改值
+	fmt.Println(slice5) //[9898]
+
+	//sh
 
 }

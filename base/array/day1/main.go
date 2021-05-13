@@ -4,6 +4,15 @@ import (
 	"fmt"
 )
 
+var array9 = [...]int{1, 3, 4, 5}
+
+func printArray(myarray [4]int) {
+	fmt.Println(myarray)
+	myarray[1] = 100
+	fmt.Println(myarray)
+	fmt.Println(array9)
+}
+
 func main() {
 	//定义定长数组
 	var array1 = [2]int{} //表示数组长度为2,容量为2 内容为int 默认是[0 0]
@@ -56,4 +65,6 @@ func main() {
 		fmt.Println()
 	}
 	//  多维数组只有第一层可以使用...来让编译器推导数组长度.数组是值类型，不可变.
+
+	printArray(array9)
 }
