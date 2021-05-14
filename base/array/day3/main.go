@@ -7,7 +7,7 @@ var array1 = [...]int{1, 2, 3, 4, 5, 6}
 func main() {
 	fmt.Println("try you best to do")
 
-	//切片
+	//数组进行切片
 	s1 := array1[0:2]
 	fmt.Printf("%v-%d-%d\n", s1, len(s1), cap(s1)) // 长度为2    容量为6 左指针到数组最后
 
@@ -23,7 +23,7 @@ func main() {
 
 	array1[2] = 10
 	fmt.Println(array1)
-	fmt.Printf("%v-%d-%d\n", s3, len(s3), cap(s3)) //[2 10]-2-5     跟着数组变
-	fmt.Printf("%v-%d-%d\n", s4, len(s4), cap(s4)) //[10]-1-4	 跟数组变
+	fmt.Printf("%v-%d-%d\n", s3, len(s3), cap(s3)) //[2 3]-2-5
+	fmt.Printf("%v-%d-%d\n", s4, len(s4), cap(s4)) //[3]-1-4
 
 }

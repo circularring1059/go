@@ -14,4 +14,7 @@ func main() {
 
 	// slice1[3] = 3 // error
 	fmt.Println(slice1)
+	//append  注意接收值还是原来的切片
+	slice1 = append(slice1, 4)
+	fmt.Println(slice1)
 }
