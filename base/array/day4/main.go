@@ -44,6 +44,20 @@ func main() {
 	slice5 = append(slice5[:3], slice5[4:]...)
 	fmt.Printf("%v-%v-%v\n", slice5, len(slice5), cap(slice5)) //[1 2 4 6 7 8]-6-7
 	slice5[0] = 100
-	fmt.Printf("%v-%v-%v\n", slice5, len(slice5), cap(slice5))
+	fmt.Printf("%v-%v-%v\n", slice5, len(slice5), cap(slice5)) //[100 2 4 6 7 8]-6-7
+
+	//append  修改底层数组值 *****
+	var array10 = [...]int{1, 2, 3}
+	fmt.Println(array10)
+	fmt.Printf("%p\n", &array10[2]) //0xc000012190
+	slice6 := array10[:]
+	fmt.Println(slice6)
+	slice6 = append(slice6[:2], 88)
+	fmt.Println(slice6)
+	fmt.Println(array10)           //[1 2 88]  可以看到不是[1 2 3]
+	fmt.Printf("%p\n", &slice6[2]) //0xc000012190
+
+	slice6[0] = 99
+	fmt.Println(array10)
 
 }
