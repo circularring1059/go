@@ -23,7 +23,7 @@ func main() {
 
 	array1[2] = 10
 	fmt.Println(array1)
-	fmt.Printf("%v-%d-%d\n", s3, len(s3), cap(s3)) //[2 3]-2-5
-	fmt.Printf("%v-%d-%d\n", s4, len(s4), cap(s4)) //[3]-1-4
+	fmt.Printf("%v-%d-%d\n", s3, len(s3), cap(s3)) //[2 10]-2-5
+	fmt.Printf("%v-%d-%d\n", s4, len(s4), cap(s4)) //[10]-1-4
 
 }
