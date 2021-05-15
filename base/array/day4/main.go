@@ -39,9 +39,11 @@ func main() {
 
 	//切片元素删除，没有专门的方法，使用append
 	var slice5 = []int{1, 2, 4, 5, 6, 7, 8}
-	fmt.Println(slice5)
+	fmt.Printf("%v-%v-%v\n", slice5, len(slice5), cap(slice5)) //[1 2 4 5 6 7 8]-7-7
 	//删除5 index=3
 	slice5 = append(slice5[:3], slice5[4:]...)
-	fmt.Println(slice5)
+	fmt.Printf("%v-%v-%v\n", slice5, len(slice5), cap(slice5)) //[1 2 4 6 7 8]-6-7
+	slice5[0] = 100
+	fmt.Printf("%v-%v-%v\n", slice5, len(slice5), cap(slice5))
 
 }
