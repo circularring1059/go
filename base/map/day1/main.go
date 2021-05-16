@@ -50,4 +50,10 @@ func main() {
 
 	fmt.Println(map2)
 
+	map3 := make(map[int]string) //可以不写容量
+	map3[1] = "c++"
+	map3[2] = "python"
+	map3[3] = "golang"
+	map3[4] = "java"
+	fmt.Println(map3)
 }
