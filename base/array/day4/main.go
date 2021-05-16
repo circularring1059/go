@@ -60,13 +60,13 @@ func main() {
 	slice6[0] = 99
 	fmt.Println(array10) //赋值同样修改底层数组
 
-	//append  特别
+	//append  特别注意
 	var array11 = [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	fmt.Println(array11)
 
 	slice7 := array11[:]
 	slice7 = append(slice7[:1], slice7[2:]...)
 	fmt.Println(slice7)
-	fmt.Println(array11)
+	fmt.Println(array11) //[1 3 4 5 6 7 8 9 9]
 
 }
