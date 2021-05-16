@@ -35,4 +35,19 @@ func main() {
 		fmt.Printf("%v\n", v)
 	}
 
+	//不存在的key
+	fmt.Println(map2["three"]) //int 对应返回 0
+	//做判断
+	v, ok := map2["three"]
+	if !ok {
+		fmt.Println("没有此key")
+	} else {
+		fmt.Print(map2["three"], v)
+	}
+
+	//delete  key
+	delete(map2, "one")
+
+	fmt.Println(map2)
+
 }
