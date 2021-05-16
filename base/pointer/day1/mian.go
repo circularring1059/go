@@ -20,6 +20,6 @@ func main() {
 	// *addr1 = 99
 	// fmt.Println(*addr1) //panic: runtime error: invalid memory address or nil pointer dereference
 	var addr2 = new(int)
-	*addr2 = 996
-	fmt.Println(*addr2)
+	*addr2 = 123
+	fmt.Println(*addr2) //123
 }
