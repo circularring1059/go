@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
+//map 是没有顺序的
 func main() {
 	fmt.Println("Learning golang map")
 	var map1 map[int]int
@@ -56,4 +57,7 @@ func main() {
 	map3[3] = "golang"
 	map3[4] = "java"
 	fmt.Println(map3)
+
+	map4 := map[int]int{1: 1, 2: 2}
+	fmt.Println(map4)
 }
