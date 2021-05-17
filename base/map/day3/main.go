@@ -2,14 +2,16 @@ package main
 
 import "fmt"
 
-var map1 map[int]int
-map1 = map[int]int{1:1,}
-func updateMap(myMap, map[int]int) {
-	myMap[1] = 111
-	fmt.Println(myMap, map1)
-}
+// func updateMap(map1, map[int]int) {
+// 	map1[1] = 111
+// 	fmt.Println(map1, map1)
+// }
 
 func main() {
-	updateMap(map1)
+	var map1 = map[int]int{1: 1}
+	// updateMap(map1)
 	fmt.Println(map1)
+
+	map2 := map[int]int{1: 1}
+	fmt.Println(map2)
 }
