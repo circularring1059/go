@@ -22,4 +22,6 @@ func main() {
 	str0 := "local variable"
 	fmt.Println(str0)
 
+	//在 if for switch 内声明的变量不能在外部使用
+
 }

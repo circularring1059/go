@@ -55,6 +55,11 @@ func func10() (str0, str1 string) {
 	return
 }
 
+//函数返回值类型为slice时，nil可以看做是一个有效的slice，没必要显示返回一个长度为0的切片
+func func11() []int {
+	return nil
+}
+
 func main() {
 	fmt.Println("Learning function")
 	func1()
@@ -67,4 +72,5 @@ func main() {
 	fmt.Println(func8())
 	fmt.Println(func9())
 	fmt.Println(func10())
+	fmt.Println(func11())
 }
