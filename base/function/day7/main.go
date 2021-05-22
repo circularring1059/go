@@ -21,6 +21,6 @@ func main() {
 		func(x, y int) int { return x - y },
 	}
 	fmt.Println(slice1[0](9, 9)) //18
-	fmt.Println(slice1[1](4, 3))
+	fmt.Println(slice1[1](4, 3)) //1
 
 }
