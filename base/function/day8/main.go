@@ -3,9 +3,9 @@ package main
 import "fmt"
 
 //闭包
-func a(int) func() int {
+func a(i int) func() int {
 	// i := 0
-	var i int
+	// var i int
 	b := func() int {
 		i++
 		fmt.Println(i)
