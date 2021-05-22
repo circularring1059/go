@@ -22,6 +22,6 @@ func main() {
 	var add1 calculatioin
 	add1 = add
 	fmt.Println("Learning function")
-	fmt.Printf("%T\n", add1)
-	fmt.Println(add1(2, 4))
+	fmt.Printf("%T\n", add1) //main.calculatioin
+	fmt.Println(add1(2, 4))  //6
 }
