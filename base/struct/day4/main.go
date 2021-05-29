@@ -29,6 +29,5 @@ func main() {
 	fmt.Println(com) //{com male 3}未改变
 
 	changePetAge(&com)
-	fmt.Println(com)
-
+	fmt.Println(com) //age = 4
 }
