@@ -30,5 +30,12 @@ func main() {
 		2,
 	}
 	fmt.Println(aom)
-	fmt.Printf("%#v", aom)
+	fmt.Printf("%#v\n", aom)
+
+	//四
+	var bom = cat{
+		name: "bom",
+		age:  3,
+	}
+	fmt.Println(bom)
 }
