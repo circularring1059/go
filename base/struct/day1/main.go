@@ -1,4 +1,4 @@
-//struct  --->> 类
+//struct  --->> 类  面向对象
 package main
 
 import "fmt"
@@ -18,5 +18,5 @@ func main() {
 	jack.age = 19
 	jack.hobby = []string{"football", "basketball"}
 
-	fmt.Println(jack) //
+	fmt.Println(jack) //{jack 男 19 [football basketball]}
 }
