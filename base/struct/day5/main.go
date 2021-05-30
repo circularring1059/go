@@ -16,7 +16,7 @@ func main() {
 	tom.age = 1
 	fmt.Printf("%v %v %v\n", tom.name, tom.age, tom)
 
-	//二
+	//二  cat 类型的指针
 	var com = new(cat)
 	(*com).name = "com"
 	com.age = 1
@@ -30,12 +30,22 @@ func main() {
 		2,
 	}
 	fmt.Println(aom)
-	fmt.Printf("%#v\n", aom)
+	fmt.Printf("%#v\n", aom) //main.cat{name:"aom", age:2}
 
 	//四
 	var bom = cat{
 		name: "bom",
 		age:  3,
 	}
-	fmt.Println(bom)
+	fmt.Println(bom) //{bom 3}
+
+	//五  cat  类型的指针
+	var dom = &cat{
+		name: "dom",
+		age:  4,
+	}
+	fmt.Println(dom)
+	fmt.Println(*dom)       //{dom 4}
+	fmt.Printf("%T\n", dom) //*main.cat
+
 }
