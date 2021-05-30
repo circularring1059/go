@@ -18,9 +18,23 @@ func newPerson(name string, age int) person {
 
 //指针类型
 func newPersion1(name string, age int) *person {
-	var pe = new(person)
+	// var pe = new(person)
+	// (*pe).name = name
+	// pe.age = age
+	// return pe
+	// return &person{
+	// 	name: name,
+	// 	age:  age,
+	// }
+	// var pe *person = &person{
+	// 	name: name,
+	// 	age:  age,
+	// }
+	// return pe
+	var pe *person
+	pe = new(person)
 	(*pe).name = name
-	pe.age = age
+	(*pe).age = age
 	return pe
 }
 
@@ -40,6 +54,6 @@ func main() {
 		age:  19,
 	}
 	cer = &person1
-	fmt.Println(cer) //&{person1 19}
-	fmt.Printf("%p %p\n", cer, &person1)
+	fmt.Println(cer)                     //&{person1 19}
+	fmt.Printf("%p %p\n", cer, &person1) //0xc0000040d8 0xc0000040d8
 }
