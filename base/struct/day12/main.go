@@ -42,6 +42,6 @@ func main() {
 		id: 23,
 	}
 	fmt.Println(tom)
-	fmt.Printf("%v %v", tom.name, tom.age) //使用匿名结构体时可以不用写tom.nameAge1.name
+	fmt.Printf("%v %v", tom.name, tom.age) //使用匿名结构体时可以不用写tom.nameAge1.name,若琪本身有该field,则优先使用本身的
 
 }
