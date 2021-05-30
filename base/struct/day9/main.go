@@ -14,8 +14,4 @@ func main() {
 	var a myInt = 10
 	fmt.Printf("%T\n", a)
 	a.getInformation()
-
-	var b int8 = 2000000
-	fmt.Println(b)
-
 }
