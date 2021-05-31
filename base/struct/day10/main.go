@@ -17,4 +17,11 @@ func main() {
 	}
 	fmt.Println(xiaoming)
 	fmt.Printf("%v %v\n", xiaoming.string, xiaoming.int)
+
+	var tom = struct {
+		name string
+		age  int
+	}{"tom", 12}
+
+	fmt.Println(tom)
 }
