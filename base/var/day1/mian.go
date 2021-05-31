@@ -51,4 +51,23 @@ func main() {
 		dec   float32 = 1.23
 	)
 	fmt.Println(name5, age6, isOk, dec)
+
+	var a = new(int)
+	b := 9
+	a = &b
+	fmt.Println(a)         //0xc0000160c8
+	fmt.Printf("%p\n", a)  //0xc0000160c8
+	fmt.Println(*a)        //9
+	fmt.Printf("%p\n", &a) //0xc000006030
+
+	var slice1 []int
+	slice1 = make([]int, 1, 2)
+	fmt.Println(slice1)
+
+	var slice2 = new([]int)
+	slice3 := []int{1, 2, 3}
+	slice2 = &slice3
+	fmt.Println(slice2)
+	fmt.Println(*slice2)
+
 }

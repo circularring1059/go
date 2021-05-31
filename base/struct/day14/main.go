@@ -37,4 +37,9 @@ func main() {
 	var middleMan person
 	json.Unmarshal([]byte(str1), &middleMan)
 	fmt.Println(middleMan)
+
+	var a = new(int)
+	b := 9
+	a = &b
+	fmt.Println(a)
 }
