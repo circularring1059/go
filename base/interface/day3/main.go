@@ -24,6 +24,7 @@ type dog struct {
 	age  int8
 }
 
+//这里使用的是指针，后面赋值时就得传指针类型
 func (d *dog) eat(arg string) {
 	fmt.Printf("%v is eatting\n", arg)
 }
