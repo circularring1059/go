@@ -5,7 +5,7 @@ import (
 )
 
 type calc interface {
-	add(x, y int) (z int)
+	add(x, y int) int
 
 	// sub(x, y int) (z int) {
 	// 	if  x > y {
@@ -39,7 +39,8 @@ func main() {
 	t = leavel
 	fmt.Println(t.add(3, 7))
 
-	s := h(leavel, 2, 4)
-	fmt.Println(s)
-
+	var t1 calc
+	fmt.Printf("%T\n", t1) //<nil>
+	t1 = leavel
+	fmt.Printf("%T\n", t1) //main.computer
 }
