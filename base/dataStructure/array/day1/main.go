@@ -4,9 +4,9 @@ import "fmt"
 
 func main() {
 	//定义定长数组
-	var array1 = [2]int{} //表示数组长度为2,容量为2 内容为int 默认是[0 0]
-	fmt.Println(array1)   //[0 0]
-	fmt.Println(len(array1), cap(array1))
+	var array1 = [2]int{}                 //表示数组长度为2,容量为2 内容为int 默认是[0 0]
+	fmt.Println(array1)                   //[0 0]
+	fmt.Println(len(array1), cap(array1)) //2 2
 	//初始化数组
 	array1 = [2]int{1, 2}
 	fmt.Println(array1)
