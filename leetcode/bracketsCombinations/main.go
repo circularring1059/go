@@ -18,6 +18,11 @@ func gen(n int, str string, left, right int) []string {
 	return ret
 }
 
+func stackCombinate(n int) []string {
+	return gen(n, str, 0, 0)
+}
+
 func main() {
 	fmt.Println(gen(2, str, 0, 0))
+	fmt.Println(stackCombinate(3))
 }
