@@ -18,9 +18,7 @@ func main() {
 	l1.PushBack("end")
 	element1 := l1.PushFront(1) //头插法  element  相当于index?
 	element2 := l1.InsertAfter("hello", element1)
-	l1.Remove(element2)
-
-	//remove
+	l1.Remove(element2) //remove
 
 	for i := l1.Front(); i != nil; i = i.Next() {
 		fmt.Println(i.Value)

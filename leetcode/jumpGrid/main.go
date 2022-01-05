@@ -30,5 +30,5 @@ func jumpGrid(m, n int) int {
 }
 
 func main() {
-	fmt.Println(jumpGrid(2, 2))
+	fmt.Println(jumpGrid(7, 3))
 }
