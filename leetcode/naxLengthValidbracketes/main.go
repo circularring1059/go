@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func Max(m, n int) int {
 	if m > n {
@@ -18,7 +20,7 @@ func maxLenghtValidBrackets(str string) int {
 			if len(strArry) == 0 {
 				ret = Max(i-point, ret)
 				point = i
-				fmt.Println(ret)
+				fmt.Println("*", ret)
 			} else {
 				strArry = append(strArry[0:len(strArry)-1], strArry[len(strArry)-1:len(strArry)-1]...)
 			}
@@ -28,13 +30,25 @@ func maxLenghtValidBrackets(str string) int {
 	}
 	// fmt.Println(point)
 	if point == 0 {
-		return Max(ret, len(str)-point)
+		return Max(ret, len(str)-point-len(strArry))
 	} else {
-		return Max(ret, len(str)-point-1)
+		return Max(ret, len(str)-point-1-len(strArry))
 	}
 
 }
 
 func main() {
-	fmt.Println(maxLenghtValidBrackets("(()))))()()()()()())()"))
+	fmt.Println(maxLenghtValidBrackets("(()))))))))))()(()))()()()()()()"))
+	// str := "ring"
+	// arry := []rune(str)
+	// fmt.Println(arry)
+	// a1 := 1
+	// a := make([]int, 0)
+	// b := make([]int, 0)
+	// var c = new(int)
+	// fmt.Printf("%v\n%p\n%v\n", a, &b, c)
+	// fmt.Printf("%+v\n", *(*reflect.SliceHeader)(unsafe.Pointer(&a)))
+	// fmt.Printf("%+v\n", *(*reflect.SliceHeader)(unsafe.Pointer(&c)))
+	// fmt.Printf("%+v\n", *(*reflect.SliceHeader)(unsafe.Pointer(&b)))
+	// fmt.Printf("%d\n", &a1)
 }
