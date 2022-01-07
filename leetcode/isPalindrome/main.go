@@ -23,7 +23,7 @@ func isPalindrome(num int) bool {
 }
 
 func isPalindrome1(num int) bool {
-	fmt.Printf("%T", num)
+	// fmt.Printf("%T", num)
 	if num < 0 {
 		return false
 	}
@@ -42,6 +42,6 @@ func test(num int) (x, y int) {
 func main() {
 	num := -121
 	fmt.Println(isPalindrome(num))
-	fmt.Println(test(101))
-	fmt.Println(isPalindrome1(01))
+	// fmt.Println(test(101))
+	fmt.Println(isPalindrome1(01)) //?
 }

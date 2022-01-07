@@ -26,4 +26,5 @@ func main() {
 	// fmt.Println(str1[1])
 	// fmt.Printf("%c", str1[1])
 	fmt.Println(strIndex("ring", "g"))
+
 }
