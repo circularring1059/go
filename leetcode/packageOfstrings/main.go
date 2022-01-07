@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -22,4 +23,10 @@ func main() {
 	fmt.Println(strings.Replace(str3, "i", "I", 1))  //替换一次
 	fmt.Println(strings.Replace(str3, "i", "I", -1)) //替换全部
 	fmt.Println(strings.TrimSpace(str1))             //去掉开头结尾的空格或者tab
+
+	var a = 97
+	var b = 97
+	fmt.Println(string(a)) //a
+	c := strconv.Itoa(b)
+	fmt.Printf("%T %v", c, c)
 }
