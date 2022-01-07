@@ -8,6 +8,7 @@ import (
 func main() {
 	now := time.Now()
 	fmt.Println(now.String()) //返回字符串类型
+	fmt.Printf("%T\n", now)   //time.time
 	fmt.Println(now)          //2022-01-07 14:24:37.1242977 +0800 CST m=+0.006823301
 	fmt.Println(now.Unix())   //1641536705  时间戳
 	fmt.Println(now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
@@ -37,5 +38,14 @@ func main() {
 	endtime := time.Since(starttime)
 	fmt.Println(starttime, endtime)
 	fmt.Println("*")
+
+	//设置时区
+	loc, _ := time.LoadLocation("Asia/Shanghai")
+	const longForm = "Jan 2, 2006 at 3:04pm (MST)"
+	const shortForm = "2006-Jan-02"
+	t1, _ := time.ParseInLocation(longForm, "Jul 9, 2012 at 5:02am (CEST)", loc)
+	t2, _ := time.ParseInLocation(shortForm, "1994-Nov-18", loc)
+	fmt.Println(t1)
+	fmt.Printf("%T -%v", t2, t2) //type time.time
 
 }
