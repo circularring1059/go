@@ -64,7 +64,7 @@ func main() {
 	n1 := n{"ring"}
 	fmt.Println(n1.name)
 	func(s n) {
-		s.name = "hello"
+		s.name = "hello" //值拷贝
 		fmt.Println(s.name)
 	}(n1)
 	fmt.Println(n1.name)
