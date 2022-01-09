@@ -16,5 +16,5 @@ func main() {
 	}(map1)
 	fmt.Println(map1)
 	changeMap(map1)
-	fmt.Println(map1)
+	fmt.Println(map1) //map 是引用类型
 }

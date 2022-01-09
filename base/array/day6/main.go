@@ -5,7 +5,7 @@ import "fmt"
 func main() {
 	array := [4]int{}
 	slice := array[:]
-	fmt.Println(array, slice) //[0 0 0 0] [0 0 0 0]
+	fmt.Println(array, slice) //[0 0 0 0] [0 0 0 0]   //array 是值类型，slice 是引用类型
 
 	func(array [4]int) {
 		array[1] = 8
