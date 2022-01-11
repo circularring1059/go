@@ -17,12 +17,16 @@ func (s *struct1) changeName1() {
 	fmt.Println(s.b)
 }
 
+var a1 struct1
+
 func main() {
+
+	fmt.Println(a1)
 	a := struct1{1, "ring"}
 	fmt.Println(a)
 	a.changeName()
-	fmt.Println(a)
+	fmt.Println(a) //{1 ring}
 	a.changeName1()
-	fmt.Print(a)
+	fmt.Print(a) //{1 ringchange}
 
 }
