@@ -19,4 +19,9 @@ func main() {
 	jack.hobby = []string{"football", "basketball"}
 
 	fmt.Println(jack) //{jack 男 19 [football basketball]}
+	func(p person) {
+		p.name = "tom"
+		fmt.Println(p)
+	}(jack)
+	fmt.Println(jack)
 }
