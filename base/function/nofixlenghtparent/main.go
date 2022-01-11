@@ -11,6 +11,6 @@ func test1(b ...string) {
 	fmt.Printf("%T\n", b)
 }
 func main() {
-	test(1, 2, 3, 4, 5, 6, 7) //[1 2 3 4 5 6 7]
-	test1("stringstring", "hello")
+	test(1, 2, 3, 4, 5, 6, 7)      //[1 2 3 4 5 6 7]
+	test1("stringstring", "hello") // [stringstring hello] []string
 }
