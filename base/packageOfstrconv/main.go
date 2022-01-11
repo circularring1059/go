@@ -44,6 +44,6 @@ func main() {
 
 	fmt.Println([]rune(str1))
 	fmt.Printf("%c\n", a)
-	fmt.Printf("%T\n", a)
+	fmt.Printf("%T\n", a) //uint8
 
 }
