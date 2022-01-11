@@ -5,6 +5,8 @@ import (
 	"strconv"
 )
 
+var a byte = 97
+
 func main() {
 	var str1 string = "ring"
 	fmt.Print(str1, "\n")
@@ -39,5 +41,9 @@ func main() {
 	fmt.Println(float32(f), err) // 0.12345679
 	f, err = strconv.ParseFloat(s, 64)
 	fmt.Println(f, err) // 0.12345678901234568
+
+	fmt.Println([]rune(str1))
+	fmt.Printf("%c\n", a)
+	fmt.Printf("%T\n", a)
 
 }
