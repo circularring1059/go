@@ -20,8 +20,8 @@ func main() {
 
 	fmt.Println(jack) //{jack 男 19 [football basketball]}
 	func(p person) {
-		p.name = "tom"
-		fmt.Println(p) //struct 是值类型
+		p.name = "tom" //值类型
+		fmt.Println(p)
 	}(jack)
 	fmt.Println(jack)
 }
