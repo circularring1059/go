@@ -5,6 +5,7 @@ import (
 	"sort"
 )
 
+//map  sort
 func main() {
 	map1 := map[int]int{3: 1, 5: 2, 1: 4}
 	fmt.Println(map1)
