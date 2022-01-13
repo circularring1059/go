@@ -78,6 +78,6 @@ func main() {
 	// }(n1)
 	// fmt.Println(n1.name)
 
-	fmt.Print("*", DeferFunc4()) //022
+	fmt.Print("*", DeferFunc4()) //02 *2
 
 }
