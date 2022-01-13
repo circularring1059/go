@@ -18,7 +18,7 @@ type Appender interface {
 	Append(int)
 }
 
-func CountInto(a Appender, start, end int) {
+func CountInto(a Appender, start, end int) { //这里要接收指针类型的结构体
 	for i := start; i <= end; i++ {
 		a.Append(i)
 	}
@@ -38,7 +38,7 @@ func main() {
 	// compiler error:
 	// cannot use lst (type List) as type Appender in argument to CountInto:
 	//       List does not implement Appender (Append method has pointer receiver)
-	CountInto(lst, 1, 10)
+	// CountInto(lst, 1, 10)
 	if LongEnough(lst) { // VALID:Identical receiver type
 		fmt.Println("*")
 		fmt.Printf("- lst is long enough\n")
