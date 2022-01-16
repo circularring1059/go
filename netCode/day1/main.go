@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+
 	listen, err := net.Listen("tcp", "0.0.0.0:9201")
 	if err != nil {
 		fmt.Println("Listen fialed")
@@ -14,14 +15,16 @@ func main() {
 	con, err := listen.Accept()
 	if err != nil {
 		fmt.Println("accept failed")
-
+		return
 	}
-	var tmp [1238]byte
-	n, err := con.Read(tmp[:])
-	if err != nil {
-		fmt.Println("")
+	defer con.Close()
+	for {
+		var msg [128]byte
+		n, err := con.Read(msg[:])
+		if err != nil {
+			fmt.Println("")
+		}
+		fmt.Println(string(msg[:n]))
 	}
-	fmt.Println("start net work")
 
-	fmt.Println(n)
 }
