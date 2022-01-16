@@ -118,6 +118,37 @@ func (link *link) travel() {
 	}
 }
 
+func (link *link) index(index int) interface{} {
+	if link.is_empty() {
+		panic("empty link unsupport index")
+	}
+	if index < 0 || index >= link.length() {
+		panic("out of index")
+	}
+	cur := link.node
+	for i := 0; i < index; i++ {
+		cur = cur.node
+	}
+	return cur.data
+}
+
+func (link *link) reverse() {
+	if link.length() > 1 {
+		cur := link.node
+		per := &node{cur.data, nil}
+		for cur.node != nil {
+			next := cur.node
+			cur.node = per
+			per = cur
+			cur = next
+		}
+		cur.node = per
+		link.node = cur
+		link.remove(link.length() - 1)
+
+	}
+}
+
 func main() {
 
 	link := newLink()
@@ -125,8 +156,11 @@ func main() {
 	link.addNode("ring")
 	link.append("file")
 	link.append("dir")
-	link.remove(3)
+	// link.remove(3)
 	// link.insert(1, 2)
 	link.travel()
-	fmt.Println(link.length())
+	link.reverse()
+	link.travel()
+	// fmt.Println(link.index(0))
+	// fmt.Println(link.length())
 }
