@@ -61,19 +61,52 @@ func (link *link) length() int {
 
 }
 
-// func (link *link) insert(index int, data interface{}) {
-// 	newNode := &node{data, nil}
-// 	if !link.is_empty() {
-// 		cur := link.node
-// 		for cur.node != nil {
-// 			cur = cur.node
-// 		}
-// 		cur.node = newNode
-// 	} else {
-// 		link.node = newNode
-// 	}
-// }
+func (link *link) insert(index int, data interface{}) {
+	if index < 0 || index >= link.length() {
+		panic("out of index")
+	}
+	newNode := &node{data, nil}
+	if link.is_empty() {
+		link.node = newNode
+	} else {
+		if index == 0 {
+			link.addNode(data)
+		} else {
+			cur := link.node
+			for i := 1; i < index; i++ {
+				cur = cur.node
+			}
+			newNode.node = cur.node
+			cur.node = newNode
+		}
+	}
+}
 
+func (link *link) remove(index int) {
+	if index < 0 || index >= link.length() {
+		panic("out of index")
+	}
+	if link.is_empty() {
+		panic("empty unsupport remove")
+	}
+	if index == 0 {
+		if link.length() == 1 {
+			link.node = nil
+		} else {
+			cur := link.node
+			link.node = cur.node
+		}
+	} else {
+		cur := link.node
+		for i := 1; i < index; i++ {
+			cur = cur.node
+		}
+		// cur_next := cur.node
+		// cur.node = cur_next.node
+		cur.node = cur.node.node
+	}
+
+}
 func (link *link) travel() {
 	cur := link.node
 	if cur != nil {
@@ -88,11 +121,12 @@ func (link *link) travel() {
 func main() {
 
 	link := newLink()
+	link.addNode("yuan")
 	link.addNode("ring")
 	link.append("file")
 	link.append("dir")
-	link.addNode("yuan")
-	link.addNode("yuan")
+	link.remove(3)
+	// link.insert(1, 2)
 	link.travel()
 	fmt.Println(link.length())
 }
