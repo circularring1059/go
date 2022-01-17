@@ -45,8 +45,8 @@ func main() {
 
 	//bufioDemo()
 
-	osArg := os.Args //[]string
-	fmt.Println("*", osArg)
+	osArg := os.Args        //[]string //go run main.go hello world
+	fmt.Println("*", osArg) //[C:\Users\rice\AppData\Local\Temp\go-build608650344\b001\exe\main.exe hello wrorld \n]
 
 	for i, v := range osArg {
 		fmt.Println(i, v)
