@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 )
 
@@ -18,7 +19,7 @@ func main() {
 	//read  对象
 	reader := bufio.NewReader(file)
 	for {
-		line, err := reader.ReadString('\n') // line type:string
+		line, err := reader.ReadString('\n') // line type:string   一行一行读
 		if err == io.EOF {
 			if len(line) != 0 {
 				fmt.Println("line")
@@ -31,8 +32,14 @@ func main() {
 			fmt.Println("file read fialed")
 			return
 		}
-		fmt.Println("**")
 		fmt.Print(line)
 	}
+
+	text, err := ioutil.ReadFile("./main.go")
+	if err != nil {
+		fmt.Println("file read failed")
+		return
+	}
+	fmt.Println(string(text))
 
 }
