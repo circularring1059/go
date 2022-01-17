@@ -5,6 +5,14 @@ import (
 	"time"
 )
 
+//定时器
+func tickDemo() {
+	ticker := time.Tick(time.Second) //定义一个1秒间隔的定时器   通道
+	for i := range ticker {
+		fmt.Println(i) //每秒都会执行的任务
+	}
+}
+
 func main() {
 	now := time.Now()
 	fmt.Println(now.String()) //返回字符串类型
@@ -48,4 +56,5 @@ func main() {
 	fmt.Println(t1)
 	fmt.Printf("%T -%v", t2, t2) //type time.time
 
+	tickDemo()
 }

@@ -34,8 +34,8 @@ func main() {
 
 	str3 := fmt.Sprintln(str1, str2)
 	str4 := fmt.Sprint(str1, str2)
-	fmt.Println(str3)
-	fmt.Println(str4)
+	fmt.Println(str3) //ring yuan
+	fmt.Println(str4) //ringyuan
 	// fmtError := errors.New("出错了")
 	// err := fmt.Errorf("这是一个错误%w", fmtError)
 	// fmt.Println(err)
@@ -43,6 +43,13 @@ func main() {
 	w := fmt.Errorf("Wrap了一个错误%w", e)
 	fmt.Println(w)
 
-	bufioDemo()
+	//bufioDemo()
+
+	osArg := os.Args //[]string
+	fmt.Println("*", osArg)
+
+	for i, v := range osArg {
+		fmt.Println(i, v)
+	}
 
 }
