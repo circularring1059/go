@@ -51,8 +51,31 @@ func lengthOfSubString1(str string) (n int) {
 	max_len = max(max_len, len(str)-start)
 	return max_len
 }
+
+func lengthOfSubString2(str string) (n int) {
+	max_len := 0
+	for i := 0; i < len(str); i++ {
+		map1 := make(map[rune]int, len(str))
+		f := new(bool)
+		for j := i; j < len(str); j++ {
+			if _, ok := map1[[]rune(str)[j]]; !ok {
+				map1[[]rune(str)[j]] = j
+			} else {
+				max_len = max(max_len, j-i)
+				*f = true
+				break
+			}
+		}
+		if !*f {
+			max_len = max(max_len, len(str)-i)
+			break
+		}
+	}
+	return max_len
+}
 func main() {
 	var str string = "rringh"
 	fmt.Println(lengthOfSubString(str))
 	fmt.Println(lengthOfSubString1(str))
+	fmt.Println(lengthOfSubString2(str))
 }
