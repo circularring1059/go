@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 )
 
 func main() {
@@ -22,9 +23,30 @@ func main() {
 	// Lshortfile                    // 文件名+行号：d.go:23（会覆盖掉Llongfile）
 	// LUTC                          // 使用UTC时间
 	// LstdFlags     = Ldate | Ltime // 标准logger的初始值
+	// log.SetFlags(log.Llongfile | log.Lmicroseconds | log.Ldate)
+	// log.Println("print log") //2022/01/17 17:03:36.745682 C:/Users/rice/go/src/github.com/go/base/packageOfLog/main.go:26: print log
+	// log.Printf("%s is not supprot", "log")
+	// log.SetPrefix("[ring] ")
+	// log.Printf("%s is not supprot", "log")
+	log.Println("log write file")
+	log.SetPrefix("[yuan]")
+	log.Default()
+	log.Println("hello world")
+
+	//创建log 对象，自定义log format
+	logger := log.New(os.Stdout, "wirte at here ", log.Lshortfile|log.Ltime)
+	logger.Println("Print log")
+
+}
+
+func init() {
+	//日志写入文件
+	logFile, err := os.OpenFile("./log.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		log.Println("logfile open file")
+		return
+	}
+	log.SetOutput(logFile)
 	log.SetFlags(log.Llongfile | log.Lmicroseconds | log.Ldate)
-	log.Println("print log") //2022/01/17 17:03:36.745682 C:/Users/rice/go/src/github.com/go/base/packageOfLog/main.go:26: print log
-	log.Printf("%s is not supprot", "log")
-	log.SetPrefix("[ring] ")
-	log.Printf("%s is not supprot", "log")
+
 }

@@ -1,0 +1,4 @@
+2022/01/17 17:28:28.727466 C:/Users/rice/go/src/github.com/go/base/packageOfLog/main.go:31: log write file
+[yuan]2022/01/17 17:28:28.752098 C:/Users/rice/go/src/github.com/go/base/packageOfLog/main.go:34: hello world
+2022/01/17 17:28:32.551452 C:/Users/rice/go/src/github.com/go/base/packageOfLog/main.go:31: log write file
+[yuan]2022/01/17 17:28:32.579151 C:/Users/rice/go/src/github.com/go/base/packageOfLog/main.go:34: hello world
