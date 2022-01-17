@@ -19,11 +19,10 @@ func lengthOfSubString(str string) (n int) {
 
 		} else {
 			max_len = max(max_len, k-start)
-			if map1[string(v)] > start {
-				start = k
+			if map1[string(v)] >= start {
+				start = map1[string(v)] + 1
 				map1[string(v)] = k
 			} else {
-				start = map1[string(v)] + 1
 				map1[string(v)] = k
 			}
 		}
@@ -41,11 +40,10 @@ func lengthOfSubString1(str string) (n int) {
 
 		} else {
 			max_len = max(max_len, k-start)
-			if map1[v] > start {
-				start = k
+			if map1[v] >= start {
+				start = map1[v] + 1
 				map1[v] = k
 			} else {
-				start = map1[v] + 1
 				map1[v] = k
 			}
 		}

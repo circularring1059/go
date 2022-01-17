@@ -31,6 +31,23 @@ func pump2(ch chan int) {
 }
 
 func suck(ch1, ch2 chan int) {
+	// Received on channel 1: 0
+	// Received on channel 2: 5
+	// Received on channel 1: 2
+	// Received on channel 1: 4
+	// Received on channel 1: 6
+	// Received on channel 1: 8
+	// Received on channel 1: 10
+	// Received on channel 1: 12
+	// Received on channel 1: 14
+	// Received on channel 1: 16
+	// Received on channel 1: 18
+	// Received on channel 1: 20
+	// Received on channel 1: 22
+	// Received on channel 1: 24
+	// Received on channel 1: 26
+	// Received on channel 1: 28
+	// Received on channel 1: 30
 	for {
 		select {
 		case v := <-ch1:
