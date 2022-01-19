@@ -19,7 +19,7 @@ func main() {
 	fmt.Println("start worker")
 	go worker()
 	fmt.Println("wait")
-	wg.Wait()
+	wg.Wait() //阻塞main 函数
 	fmt.Print("end worker")
 
 }
