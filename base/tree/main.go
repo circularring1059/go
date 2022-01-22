@@ -70,25 +70,66 @@ func (t *tree) breadth_travel() {
 	}
 
 }
+func beforeInner(n *node) {
+	if n == nil {
+		return
+	}
+	fmt.Println(n.elem)
+	beforeInner(n.left)
+	beforeInner(n.right)
+}
 
+func (t *tree) beforeOrder() {
+	if t.root == nil {
+		return
+	}
+	cur := t.root
+	beforeInner(cur)
+
+}
+
+func InInner(n *node) {
+	if n == nil {
+		return
+	}
+	beforeInner(n.left)
+	fmt.Println(n.elem)
+	beforeInner(n.right)
+}
+
+func (t *tree) InOrder() {
+	if t.root == nil {
+		return
+	}
+	cur := t.root
+	InInner(cur)
+}
+
+func afterInner(n *node) {
+	if n == nil {
+		return
+	}
+	afterInner(n.left)
+	afterInner(n.right)
+	fmt.Println(n.elem)
+}
+
+func (t *tree) afterOrder() {
+	if t.root == nil {
+		return
+	}
+	cur := t.root
+	afterInner(cur)
+}
 func main() {
 	tree := newTree()
-	// fmt.Println(tree)
 	tree.add(1)
 	tree.add(2)
 	tree.add(3)
 	tree.add(4)
-	tree.breadth_travel()
-
-	// sl := []int{1, 2, 3, 4}
-	// fmt.Println(sl)
-	// for {
-	// 	if len(sl) > 0 {
-	// 		fmt.Println(sl[0])
-	// 		sl = append(sl[:0], sl[1:]...)
-	// 	} else {
-	// 		break
-	// 	}
-	// }
+	// tree.breadth_travel()
+	// tree.beforeOrder()
+	// tree.InOrder()
+	tree.afterOrder()
 
 }
