@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type node struct {
 	elem  interface{}
@@ -22,25 +24,28 @@ func (t *tree) add(elem interface{}) {
 		return
 	}
 	queue := []*node{t.root}
-	for _, cur := range queue {
-		// cur := queue[0]
-		fmt.Println(cur)
+
+	for {
+		if len(queue) <= 0 {
+			break
+		}
+		cur := queue[0]
 		queue = append(queue[:0], queue[1:]...)
 		if cur.left == nil {
+
 			cur.left = child
-			return
+			break
 		} else {
 			queue = append(queue, cur.left)
 		}
 		if cur.right == nil {
 			cur.right = child
-			return
+			break
 		} else {
 			queue = append(queue, cur.right)
 		}
 
 	}
-
 }
 
 func (t *tree) breadth_travel() {
@@ -48,14 +53,18 @@ func (t *tree) breadth_travel() {
 		return
 	}
 	queue := []*node{t.root}
-	for _, v := range queue {
-		queue = append(queue[:0], queue[1:]...)
-		fmt.Println(v.elem, "8")
-		if v.left != nil {
-			queue = append(queue, v.left)
+	for {
+		if len(queue) <= 0 {
+			break
 		}
-		if v.right != nil {
-			queue = append(queue, v.right)
+		cur := queue[0]
+		queue = append(queue[:0], queue[1:]...)
+		fmt.Println(cur.elem)
+		if cur.left != nil {
+			queue = append(queue, cur.left)
+		}
+		if cur.right != nil {
+			queue = append(queue, cur.right)
 
 		}
 	}
@@ -63,8 +72,6 @@ func (t *tree) breadth_travel() {
 }
 
 func main() {
-	fmt.Println("hello")
-	//newTree
 	tree := newTree()
 	// fmt.Println(tree)
 	tree.add(1)
@@ -72,5 +79,16 @@ func main() {
 	tree.add(3)
 	tree.add(4)
 	tree.breadth_travel()
+
+	// sl := []int{1, 2, 3, 4}
+	// fmt.Println(sl)
+	// for {
+	// 	if len(sl) > 0 {
+	// 		fmt.Println(sl[0])
+	// 		sl = append(sl[:0], sl[1:]...)
+	// 	} else {
+	// 		break
+	// 	}
+	// }
 
 }
