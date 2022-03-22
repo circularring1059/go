@@ -149,6 +149,22 @@ func (link *link) reverse() {
 	}
 }
 
+func (link *link) reverse1() {
+	cur := link.node
+	link.node = reversePer(cur)
+}
+
+func reversePer(node *node) *node {
+	if node.node == nil {
+		return node
+	} else {
+		newHead := reversePer(node.node)
+		node.node.node = node
+		node.node = nil
+		return newHead
+	}
+}
+
 func main() {
 
 	link := newLink()
@@ -159,8 +175,9 @@ func main() {
 	// link.remove(3)
 	// link.insert(1, 2)
 	link.travel()
-	link.reverse()
+	link.reverse1()
 	link.travel()
 	// fmt.Println(link.index(0))
 	// fmt.Println(link.length())
+
 }
