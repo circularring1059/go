@@ -47,5 +47,5 @@ func main() {
 	fmt.Println(f2()) //6
 	fmt.Println(f3()) //5
 	fmt.Println(f4()) //5
-	f5()
+	f5()              //word  hello
 }
