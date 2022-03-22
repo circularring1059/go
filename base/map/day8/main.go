@@ -22,6 +22,6 @@ func main() {
 	map3 := map2
 	fmt.Printf("%p, %p, %p\n", map1, map2, map3)
 	map3["one"] = 1
-	fmt.Println(map1, map2, map3)
+	fmt.Println(map1, map2, map3) //map1、2、3 share the same address
 
 }
