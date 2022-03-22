@@ -7,7 +7,7 @@ import (
 )
 
 type person struct {
-	Name string
+	Name string //开头要大写，否者访问不到
 	Age  int
 }
 
