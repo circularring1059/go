@@ -1,4 +1,4 @@
-package main
+package ring
 
 import "fmt"
 
@@ -32,9 +32,9 @@ func isLoop(node *node) bool {
 func main() {
 	node1 := &node{1, nil}
 	node2 := &node{2, node1}
-	// node3 := &node{3, node2}
-	// node4 := &node{4, node3}
+	node3 := &node{3, node2}
+	node4 := &node{4, node3}
 	node1.node = node2
 
-	fmt.Println(isLoop(node2))
+	fmt.Println(isLoop(node4))
 }

@@ -7,6 +7,36 @@ type person struct {
 	age  int
 }
 
+//构造函数
+func createPerson(name string, age int) *person {
+	return &person{
+		name: name,
+		age:  age,
+	}
+}
+
+//方法，结构体属性
+func (p person) showSelf() {
+	fmt.Println(p.name, p.age)
+}
+
+//指针方法
+func (p *person) changeName(name string) {
+	p.name = name
+	fmt.Println(p)
+}
+
+//结构体是值类型
+func changeName(p person, name string) {
+	p.name = name
+	fmt.Println(p.name, p)
+}
+
+func changeAge(p *person, age int) {
+	p.age = age
+	fmt.Println(p, p.age)
+}
+
 func main() {
 	bobo := person{"bobo", 17}
 	fmt.Println(bobo.name, bobo.age)
@@ -76,4 +106,22 @@ func main() {
 	}
 	fmt.Println(bobo12)
 
+	//构造bobo13
+	bobo13 := createPerson("bobo13", 15)
+	fmt.Println(bobo13)
+
+	bobo9.showSelf() //传指针也ok
+	bobo12.showSelf()
+
+	// bobo9.changeName("bobo12")
+	// bobo12.changeName("bobo9")
+
+	changeName(bobo12, "bobo9") //值传递
+	fmt.Println(bobo12)
+
+	changeAge(&bobo12, 23) //引用传递
+	fmt.Println(bobo12)
+  
+	changeAge(bobo13, 18)
+	fmt.Println(bobo13)
 }
