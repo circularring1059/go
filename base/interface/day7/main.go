@@ -25,6 +25,8 @@ func (c *cat) speak() {
 }
 
 func main() {
+	//一个类型可以同时实现多个接口
+	//多种类型实现同一接口
 	fmt.Println("interface review")
 	personIns := person{}
 	personIns.speak()
