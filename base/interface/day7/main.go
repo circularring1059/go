@@ -8,10 +8,11 @@ type dog struct{}
 
 type cat struct{}
 
-type speak interface{
-	//struct  需要实现interface 中*所有*方法
+type speak interface {
+	//struct  需要实现interface 中*所有*方法或者其嵌套的struct 能够实现其中的方法也可
 	speak()
 }
+
 func (p person) speak() {
 	fmt.Println("I am  person")
 }
@@ -43,8 +44,8 @@ func main() {
 	interfaceIns.speak()
 	fmt.Printf("%T\n", interfaceIns)
 
-	var dogIns1  dog
-	interfaceIns = &dogIns1  //必须传指针，不能是dog struct
+	var dogIns1 dog
+	interfaceIns = &dogIns1 //必须传指针，不能是dog struct
 	interfaceIns.speak()
 	fmt.Printf("%T\n", interfaceIns)
 
