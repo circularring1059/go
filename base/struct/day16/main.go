@@ -114,14 +114,15 @@ func main() {
 	bobo12.showSelf()
 
 	// bobo9.changeName("bobo12")
-	// bobo12.changeName("bobo9")
+	bobo12.changeName("bobo9")
+	fmt.Printf("bobo12's type: %T\n", bobo12)
 
 	changeName(bobo12, "bobo9") //值传递
 	fmt.Println(bobo12)
 
 	changeAge(&bobo12, 23) //引用传递
 	fmt.Println(bobo12)
-  
+
 	changeAge(bobo13, 18)
 	fmt.Println(bobo13)
 }
