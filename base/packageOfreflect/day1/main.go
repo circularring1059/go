@@ -20,6 +20,8 @@ func main() {
 	fmt.Println(d, d.Name(), d.Kind())
 
 	var f interface{} = 1.2117
-	fmt.Println(reflect.TypeOf(f))
+	var g interface{} = []interface{}{"hello", 2, map[int]string{1: "one"}}
+	fmt.Println(reflect.TypeOf(f)) // float64
+	fmt.Println(reflect.TypeOf(g)) // float64
 
 }
