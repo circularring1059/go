@@ -7,6 +7,7 @@ import (
 )
 
 var wg sync.WaitGroup
+var onece sync.Once
 
 func send(c chan int) {
 	defer wg.Done()
@@ -25,7 +26,7 @@ func receiver(c chan int, c1 chan int) {
 		c1 <- i * i
 		fmt.Println("intput chan3")
 	}
-	close(c1)
+	onece.Do(func (){close(c1)}) ///只关闭一次chan
 }
 
 func main() {
@@ -41,6 +42,7 @@ func main() {
 	chan2 := make(chan int, ) //有接收者，可以不用缓冲
 	chan3 := make(chan int, 5)
 	go send(chan2)
+	go receiver(chan2, chan3)
 	go receiver(chan2, chan3)
 	
 	for i := range chan2{
