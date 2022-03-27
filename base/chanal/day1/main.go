@@ -25,6 +25,8 @@ func main() {
 	go sendData(ch)
 	go getData(ch)
 
+
+
 	time.Sleep(1e9)
 }
 
@@ -43,4 +45,7 @@ func getData(ch chan string) {
 		input = <-ch
 		fmt.Printf("%s\n", input)
 	}
+
+
+	
 }

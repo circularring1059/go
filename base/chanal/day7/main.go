@@ -15,7 +15,7 @@ func show(num int) int {
 
 func show1(num int)int{
 	var sum int
-	for num >0 {
+	for num > 0 {
 		sum += num % 10
 		num = num / 10
 	}
