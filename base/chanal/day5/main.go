@@ -11,7 +11,7 @@ func main () {
 	chan1 := make(chan int ) //无缓冲
 	fmt.Println(chan1)
 
-	chan2 := make(chan string )
+	chan2 := make(chan string, 5) //有缓冲
 	fmt.Println(chan2)
 
 	chan1 <- 1   //chan 无缓冲，必需有接受者，否则deadlock
