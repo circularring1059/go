@@ -48,6 +48,7 @@ func main() {
 	for i := range chan2{
 		fmt.Println("i is:", i)
 	}
+
 	
 	wg.Wait()
 }
