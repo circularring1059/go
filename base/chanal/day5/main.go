@@ -12,10 +12,12 @@ func main () {
 	chan1 := make(chan int ) //无缓冲
 	fmt.Println(chan1)
 
+	// chan1 <- 1 //chan 无缓冲，必需有接收者，否则deadlock, 在有接收者的情况下，chan 满了则会阻塞
+
 	chan2 := make(chan string, 5) //有缓冲
 	fmt.Println(chan2)
 
-	chan2  <- "chan"   //chan 无缓冲，必需有接受者，否则deadlock
+	chan2  <- "chan"   
 	fmt.Println("***")
 
 	var chan3 chan int
