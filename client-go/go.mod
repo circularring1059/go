@@ -2,4 +2,7 @@ module github.com/go/client-go
 
 go 1.16
 
-require k8s.io/client-go v0.18.0 // indirect
+require (
+	k8s.io/apimachinery v0.18.0
+	k8s.io/client-go v0.18.0
+)
