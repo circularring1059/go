@@ -1,16 +1,20 @@
 package pkg
 
 import (
+	"context"
 	"reflect"
+	"time"
 
+	v14 "k8s.io/api/core/v1"
+	v12 "k8s.io/api/networking/v1"
+	"k8s.io/apimachinery/pkg/api/errors"
+	v13 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/client-go/kubernetes"
 	coreLister "k8s.io/client-go/listers/core/v1"
 	v1 "k8s.io/client-go/listers/networking/v1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
-	v12 "k8s.io/api/networking/v1"
-	v13 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 const (
@@ -63,7 +67,6 @@ func (c *controller) processNextItem() bool{
 
 func (c *controller) worker() {
 	for c.processNextItem() {
-
 	}
 }
 
@@ -80,7 +83,74 @@ func (c *contoller)addService(obj interface{}){
 	
 }
 
+func (c *controller) Run(stopCache struct{}) {
+	for i := 0;  i < workNum; i++{
+		go wait.Until(c.woker, time.Minute, stopCache)
+	}
+	<-  stopCache
+}
 
+func (c *controller)syncService(key string) error{
+	namespaceKey, name, err := cache.SplitMetaNamespaceKey(key)
+	if err != nil {
+		return  err
+	}
+
+	//delete
+	service, err := c.ServiceLister.Service(namespaceKey).Get(name)
+	if errors.IsNotFound(err) {
+		return nil
+	}
+
+	if err != nil{
+		return  err
+	}
+
+	//add && delete 
+	_, ok  := service.GetAnnotaions()["ingress/http"]
+	ingress, err := c.ingressLister.Ingress(namespaceKey).Get(name)
+	if err !=  nil &&  !erros.IsNotFound(err) {
+		return err
+	}
+
+	if ok && errors.IsNotFound(err) {
+		ig  := c.constructIngress(service)
+		_, err := c.client.NetworkingV1().Ingress(namespaceKey).Create(context.TODO(), ig, v13.CreateOptions{})
+		if err != nil {
+			return err
+		}
+	}else if !ok && ingress != nil {
+		err := c.client.NetworkingV1.Ingress(namespaceKey).delete(context.TODO(), name, v13.DeleteOptions{})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func  (c *controller)HandleError(key string, err error){
+	if c.queue.NumRequeues(key) <=  maxRetry {
+		c.queue.AddRateLimited(key)
+		return
+	}
+
+	runtime.HandleError(err)
+	c.queue.Forget(key)
+}
+
+func  (c *controller) constructIngress(service *v14.Service) *v12.Ingress{
+	ingress := v12.Ingress{}
+
+	ingress.ObjectMeta.OwnerReferences =  []v13.OwnerReference{
+		*v13.NewControllerRef(service, v14.SchemeGroupVersion.WithKind("Service")),
+	}
+
+	ingress.Name = service.Name
+	ingress.Namespace = service.Namespace
+	pathType := v12.PathType
+	icn := "nginx"
+	
+}
 //构造contreoller
 func Newcontroller(client kubernetes.Interface, serviceInformer coreLister.ServiceLister, ingressLister ) concontoller{
 	c := concontoller{
