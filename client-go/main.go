@@ -62,7 +62,7 @@ func main() {
 	if err != nil {
 		fmt.Println("not such pod")
 	} else {
-		fmt.Println("pod:", pod.Labels)
+		fmt.Println("pod:", pod.S)
 	}
 
 	//informer
