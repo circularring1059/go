@@ -24,4 +24,7 @@ func main() {
 		fmt.Println(p)
 	}(jack)
 	fmt.Println(jack)
+
+	bobo := person{}
+	fmt.Println(bobo)
 }
