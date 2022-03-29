@@ -149,6 +149,32 @@ func  (c *controller) constructIngress(service *v14.Service) *v12.Ingress{
 	ingress.Namespace = service.Namespace
 	pathType := v12.PathType
 	icn := "nginx"
+	ingress.Spec = v12.IngressSpec{
+		IngressClassName:  &icn,
+		Rules:  []v12.IngressRule{
+			{
+				host: "ring.com",
+				IngressRuleValue: v12.IngressRuleValue{
+					HTTP: &v12.HTTPIngressRuleValue{
+						Paths: []v12.HTTPIngressPath{
+							Path: "/",
+							pathType:  &pathType,
+							Backend: v12.IngressBackend{
+								Service: &v12.IngressServiceBackend{
+									Name: service.Name,
+									Port: v12.ServiceBackendPort{
+										Name: 80,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	return &ingress
 	
 }
 //构造contreoller
@@ -170,6 +196,5 @@ func Newcontroller(client kubernetes.Interface, serviceInformer coreLister.Servi
 	})
 
 	return c
-
 	
 }
