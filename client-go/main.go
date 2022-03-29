@@ -7,7 +7,9 @@ import (
 	"path/filepath"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 	//
@@ -62,5 +64,31 @@ func main() {
 	} else {
 		fmt.Println("pod:", pod.Labels)
 	}
+
+	//informer
+	factory := informers.NewSharedInformerFactoryWithOptions(clientset, 0, informers.WithNamespace("default"))
+	informer := factory.Core().V1().Pods().Informer()
+
+	//事件处理
+	informer.AddEventHandler(cache.ResourceEventHandlerFuncs{
+		AddFunc: func(obj interface{}) {
+			fmt.Println("add event")
+		},
+
+		UpdateFunc: func(oldObj, newObj interface{}) {
+			fmt.Println("Update Event")
+		},
+
+		DeleteFunc: func(obj interface{}) {
+			fmt.Println("delete event")
+		},
+	})
+
+	//run informer
+	stopCache := make(chan struct{})
+	factory.Start(stopCache)
+	factory.WaitForCacheSync(stopCache)
+	x := <-stopCache
+	fmt.Println(x)
 
 }
