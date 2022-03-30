@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
@@ -61,7 +60,7 @@ func main() {
 	if err != nil {
 		fmt.Println("not such pod")
 	} else {
-		fmt.Println("pod:", pod.S)
+		fmt.Println("pod:", pod.Name)
 	}
 
 	// //informer
@@ -90,10 +89,10 @@ func main() {
 	// x := <-stopCache
 	// fmt.Println(x)
 
-	factory := informers.NewSharedInformerFactory(clientset, 0)
-	serviceInformer := factory.Core().V1().Services()
-	serviceInformer := factory.Networking().V1().Ingresses()
+	// factory := informers.NewSharedInformerFactory(clientset, 0)
+	// serviceInformer := factory.Core().V1().Services()
+	// serviceInformer := factory.Networking().V1().Ingresses()
 
-	controller := pkg.N
+	// controller := pkg.N
 
 }
