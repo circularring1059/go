@@ -24,4 +24,9 @@ func main() {
 		fmt.Println(p)
 	}(jack)
 	fmt.Println(jack)
+
+	bobo := person{}
+	fmt.Println(bobo)
+	bobo.age = 50
+	fmt.Println(bobo)
 }

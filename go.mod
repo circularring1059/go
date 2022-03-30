@@ -1,3 +1,3 @@
-module github.com
+module github.com/go
 
 go 1.16

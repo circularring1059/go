@@ -8,7 +8,7 @@ func main() {
 	var map1 map[int]int
 	fmt.Println(map1 == nil) //true
 	var map2 map[string]int
-	fmt.Println(map2 == nil) //trye
+	fmt.Println(map2 == nil) //true
 
 	map1 = map[int]int{1: 1, 2: 2}
 	fmt.Printf("%v-%v\n", len(map1), map1) //2-map[1:1 2:2]
