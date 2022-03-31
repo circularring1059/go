@@ -1,14 +1,12 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"path/filepath"
 
 	//"k8s.io/apimachinery/pkg/api/errors"
-	"github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/limits"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
@@ -41,17 +39,10 @@ func main() {
 	// create the clientset
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		panic(err.Error())
-	}
-	
-	//list pod
-	pods, err :=  clientset.CoreV1().Pods().L
-	if err != nil {
+		fmt.Println("**")
 		fmt.Println(err)
-		return
+	} else {
+		fmt.Println(clientset)
 	}
-	
-	for  _, pod := range pods.Items {
-		fmt.Println(pod.Name)
-	}
+
 }
