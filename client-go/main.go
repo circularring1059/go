@@ -5,8 +5,12 @@ import (
 	"flag"
 	"fmt"
 	"path/filepath"
+
+	"github.com/go/client-go/pkg"
+
 	//"time"
 
+	"k8s.io/client-go/informers"
 	//"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -90,10 +94,15 @@ func main() {
 	// x := <-stopCache
 	// fmt.Println(x)
 
-	// factory := informers.NewSharedInformerFactory(clientset, 0)
-	// serviceInformer := factory.Core().V1().Services()
-	// serviceInformer := factory.Networking().V1().Ingresses()
+	factory := informers.NewSharedInformerFactory(clientset, 0)
+	serviceInformer := factory.Core().V1().Services()
+	ingressInformer := factory.Networking().V1().Ingresses()
 
-	// controller := pkg.N
+	controller := pkg.Newcontroller(clientset, serviceInformer, ingressInformer)
+	stopCh := make(chan struct{})
+	factory.Start(stopCh)
+	factory.WaitForCacheSync(stopCh)
+
+	controller.Run(stopCh)
 
 }

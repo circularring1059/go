@@ -13,7 +13,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	coreLister "k8s.io/client-go/listers/core/v1"
 	v1 "k8s.io/client-go/listers/networking/v1"
-	"k8s.io/client-go/tools/cache"
+	cache "k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
 )
 
@@ -79,7 +79,7 @@ func (c *contoller)enqueue(newObj, interface{}){
 }
 
 func (c *contoller)addService(obj interface{}){
-	c.enqueue(obj)
+	c.enqueue(key)
 	
 }
 
