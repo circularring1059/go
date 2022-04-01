@@ -28,7 +28,7 @@ const (
 
 type controller struct {
 	client        kubernetes.Interface
-	ingressLister v1.IngressClassLister
+	ingressLister v1.IngressLister
 	serviceLister coreLister.ServiceLister
 	queue         workqueue.RateLimitingInterface
 }
@@ -61,7 +61,7 @@ func (c *controller) deleteIngress(obj interface{}) {
 	if ownerReference.Kind != "Service" {
 		return
 	}
-	c.queue.Add(ingress.namespace + "/" + ingress.Name)
+	c.queue.Add(ingress.ObjectMeta.Namespace + "/" + ingress.ObjectMeta.Name)
 }
 
 func (c *controller) processNextItem() bool {
@@ -72,7 +72,7 @@ func (c *controller) processNextItem() bool {
 
 	defer c.queue.Done(item)
 
-	key := item(string)
+	key := item.(string)
 	err := c.syncService(key)
 	if err != nil {
 		c.HandleError(key, err)
@@ -99,7 +99,7 @@ func (c *controller) syncService(key string) error {
 	}
 
 	//delete
-	service, err := c.serviceLister.service(namespaceKey).Get(name)
+	service, err := c.serviceLister.Services(namespaceKey).Get(name)
 	if errors.IsNotFound(err) {
 		return nil
 	}
@@ -109,20 +109,20 @@ func (c *controller) syncService(key string) error {
 	}
 
 	//add && delete
-	_, ok := service.GetAnnotaions()["ingress/http"]
-	ingress, err := c.ingressLister.Ingress(namespaceKey).Get(name)
+	_, ok := service.GetAnnotations()["ingress/http"]
+	ingress, err := c.ingressLister.Ingresses(namespaceKey).Get(name)
 	if err != nil && !errors.IsNotFound(err) {
 		return err
 	}
 
 	if ok && errors.IsNotFound(err) {
 		ig := c.constructIngress(service)
-		_, err := c.client.NetworkingV1().Ingress(namespaceKey).Create(context.TODO(), ig, v13.CreateOptions{})
+		_, err := c.client.NetworkingV1().Ingresses(namespaceKey).Create(context.TODO(), ig, v13.CreateOptions{})
 		if err != nil {
 			return err
 		}
 	} else if !ok && ingress != nil {
-		err := c.client.NetworkingV1.Ingress(namespaceKey).delete(context.TODO(), name, v13.DeleteOptions{})
+		err := c.client.NetworkingV1().Ingresses(namespaceKey).Delete(context.TODO(), name, v13.DeleteOptions{})
 		if err != nil {
 			return err
 		}
@@ -147,26 +147,27 @@ func (c *controller) constructIngress(service *v14.Service) *v12.Ingress {
 		*v13.NewControllerRef(service, v14.SchemeGroupVersion.WithKind("Service")),
 	}
 
-	ingress.Name = service.Name
-	ingress.Namespace = service.Namespace
-	pathType := v12.PathType
+	ingress.ObjectMeta.Name = service.Name
+	ingress.ObjectMeta.Namespace = service.Namespace
+	pathType := v12.PathTypePrefix
 	icn := "nginx"
 	ingress.Spec = v12.IngressSpec{
 		IngressClassName: &icn,
 		Rules: []v12.IngressRule{
 			{
-				host: "ring.com",
+				Host: "ring.com",
 				IngressRuleValue: v12.IngressRuleValue{
 					HTTP: &v12.HTTPIngressRuleValue{
 						Paths: []v12.HTTPIngressPath{
 							{
 								Path:     "/",
-								pathType: &pathType,
+								PathType: &pathType,
 								Backend: v12.IngressBackend{
 									Service: &v12.IngressServiceBackend{
 										Name: service.Name,
 										Port: v12.ServiceBackendPort{
-											Name: 80,
+											Name: "ring",
+											Number: 80,
 										},
 									},
 								},
