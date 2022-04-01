@@ -184,7 +184,7 @@ func (c *controller) constructIngress(service *v14.Service) *v12.Ingress {
 }
 
 //构造contreoller
-func Newcontroller(client kubernetes.Interface, serviceInformer informer.ServiceInformer, ingressInformer netInformer.IngressInformer) concontoller {
+func Newcontroller(client kubernetes.Interface, serviceInformer informer.ServiceInformer, ingressInformer netInformer.IngressInformer) controller {
 	c := controller{
 		client:        client,
 		ingressLister: ingressInformer.Lister(),
@@ -196,7 +196,7 @@ func Newcontroller(client kubernetes.Interface, serviceInformer informer.Service
 		UpdateFunc: c.updateService,
 	})
 
-	ingressInformer.Informer.AddEventHandler(cache.ResourceEventHandlerFuncs{
+	ingressInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
 		DeleteFunc: c.deleteIngress,
 	})
 
