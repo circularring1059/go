@@ -1,7 +1,7 @@
 package main
 
 import (
-	"context"
+	// "context"
 	"flag"
 	"fmt"
 	"path/filepath"
@@ -11,8 +11,10 @@ import (
 	//"time"
 
 	"k8s.io/client-go/informers"
+	// "k8s.io/client-go/tools/cache"
+
 	//"k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	// metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
@@ -42,31 +44,31 @@ func main() {
 		panic(err.Error())
 	}
 
-	// create the clientset
+	// // create the clientset
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		panic(err.Error())
 	}
-	//获取default namespace 下的所有pod
-	pods, err := clientset.CoreV1().Pods("default").List(context.TODO(), metav1.ListOptions{})
-	if err != nil {
-		panic("list pod faile")
-	}
+	// //获取default namespace 下的所有pod
+	// pods, err := clientset.CoreV1().Pods("default").List(context.TODO(), metav1.ListOptions{})
+	// if err != nil {
+	// 	panic("list pod faile")
+	// }
 
-	//fmt.Println(len(pods.Items))
+	// //fmt.Println(len(pods.Items))
 
-	for _, pod := range pods.Items {
-		fmt.Println(pod.Name)
-	}
+	// for _, pod := range pods.Items {
+	// 	fmt.Println(pod.Name)
+	// }
 
-	//获取单个pod
-	pod, err := clientset.CoreV1().Pods("default").Get(context.TODO(), "etcd-56f5bf55b6-vqvjc", metav1.GetOptions{})
+	// //获取单个pod
+	// pod, err := clientset.CoreV1().Pods("default").Get(context.TODO(), "etcd-56f5bf55b6-vqvjc", metav1.GetOptions{})
 
-	if err != nil {
-		fmt.Println("not such pod")
-	} else {
-		fmt.Println("pod:", pod.Name)
-	}
+	// if err != nil {
+	// 	fmt.Println("not such pod")
+	// } else {
+	// 	fmt.Println("pod:", pod.Name)
+	// }
 
 	// //informer
 	// factory := informers.NewSharedInformerFactoryWithOptions(clientset, 0, informers.WithNamespace("default"))
@@ -87,16 +89,35 @@ func main() {
 	// 	},
 	// })
 
-	// //run informer
+	
+
+	factory := informers.NewSharedInformerFactory(clientset, 0)
+	serviceInformer := factory.Core().V1().Services()
+	ingressInformer := factory.Networking().V1().Ingresses()
+	//事件处理
+	// ingressInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
+	// 	AddFunc: func(obj interface{}) {
+	// 		fmt.Println("add event")
+	// 	},
+
+	// 	UpdateFunc: func(oldObj, newObj interface{}) {
+	// 		fmt.Println("Update Event")
+	// 	},
+
+	// 	DeleteFunc: func(obj interface{}) {
+	// 		fmt.Println("delete event")
+	// 	},
+	// })
+
+
+	//run informer
 	// stopCache := make(chan struct{})
 	// factory.Start(stopCache)
 	// factory.WaitForCacheSync(stopCache)
 	// x := <-stopCache
 	// fmt.Println(x)
 
-	factory := informers.NewSharedInformerFactory(clientset, 0)
-	serviceInformer := factory.Core().V1().Services()
-	ingressInformer := factory.Networking().V1().Ingresses()
+	fmt.Println("strat job")
 
 	controller := pkg.Newcontroller(clientset, serviceInformer, ingressInformer)
 	stopCh := make(chan struct{})
@@ -104,5 +125,6 @@ func main() {
 	factory.WaitForCacheSync(stopCh)
 
 	controller.Run(stopCh)
+	
 
 }

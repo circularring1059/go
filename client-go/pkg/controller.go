@@ -155,7 +155,7 @@ func (c *controller) constructIngress(service *v14.Service) *v12.Ingress {
 		IngressClassName: &icn,
 		Rules: []v12.IngressRule{
 			{
-				Host: "ring.com",
+				Host: "test-ingress.com",
 				IngressRuleValue: v12.IngressRuleValue{
 					HTTP: &v12.HTTPIngressRuleValue{
 						Paths: []v12.HTTPIngressPath{
@@ -166,7 +166,7 @@ func (c *controller) constructIngress(service *v14.Service) *v12.Ingress {
 									Service: &v12.IngressServiceBackend{
 										Name: service.Name,
 										Port: v12.ServiceBackendPort{
-											Name: "ring",
+											// Name: "ring",
 											Number: 80,
 										},
 									},
