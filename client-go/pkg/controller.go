@@ -101,7 +101,7 @@ func (c *controller) syncService(key string) error {
 	}
 
 	//delete  //判断该services  是否存在
-	service, err := c.serviceLister.Services(namespaceKey).Get(name)
+	service, err := c.serviceLister.Services(namespaceKey).Get(name) //return services resource struct
 	if errors.IsNotFound(err) {
 		return nil
 	}
@@ -111,7 +111,7 @@ func (c *controller) syncService(key string) error {
 	}
 
 	//add && delete
-	_, ok := service.GetAnnotations()["ingress/http"]
+	_, ok := service.GetAnnotations()["ingress/http"]  //func (meta *ObjectMeta) GetAnnotations() map[string]string            { return meta.Annotations }
 	ingress, err := c.ingressLister.Ingresses(namespaceKey).Get(name)
 	if err != nil && !errors.IsNotFound(err) {
 		return err
