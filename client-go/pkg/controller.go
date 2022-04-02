@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"time"
 	"fmt"
+	// "strconv"
 
 	informer "k8s.io/client-go/informers/core/v1"
 
@@ -50,8 +51,15 @@ func (c *controller) updateService(oldObj interface{}, newObj interface{}) {
 	if reflect.DeepEqual(oldObj, newObj) {
 		return
 	}
-	fmt.Println("services update workqueue add")
+	// fmt.Println(oldObj, *newObj.GetAnnotations()["ingress/http"])
+	// fmt.Printf("%T %T", oldObj, newObj)
 	c.enqueue(newObj)
+		fmt.Println("services update workqueue add")
+	// if newObj.GetAnnotations()["ingress/http"] != oldObj.GetAnnotations()["ingress/http"] {
+	// }else {
+	// 	fmt.Println("update service but annotation[ingress/http] not change")
+	// }
+		
 }
 
 func (c *controller) deleteIngress(obj interface{}) {
@@ -118,6 +126,7 @@ func (c *controller) syncService(key string) error {
 	}
 
 	if ok && errors.IsNotFound(err) {
+		fmt.Println("create ingress struct")
 		ig := c.constructIngress(service)
 		_, err := c.client.NetworkingV1().Ingresses(namespaceKey).Create(context.TODO(), ig, metaV1.CreateOptions{})
 		if err != nil {
@@ -144,6 +153,16 @@ func (c *controller) HandleError(key string, err error) {
 }
 
 func (c *controller) constructIngress(service *apiCoreV1.Service) *apiNetV1.Ingress {
+	fmt.Println("debug")
+	// if port := service.GetAnnotations()["port"]; bool(port){
+	// 	fmt.Println(port)
+	// }
+	// var x int32 = 99
+	// port, err := strconv.ParseInt(service.GetAnnotations()["port"], 10, 32)
+	// if err != nil {
+	// 	port = x
+	// }
+	port := service.Spec.Ports[0].Port  //获取services ports 的第一个值作为ingres  的port
 	ingress := apiNetV1.Ingress{}
 
 	ingress.ObjectMeta.OwnerReferences = []metaV1.OwnerReference{
@@ -158,7 +177,7 @@ func (c *controller) constructIngress(service *apiCoreV1.Service) *apiNetV1.Ingr
 		IngressClassName: &icn,
 		Rules: []apiNetV1.IngressRule{
 			{
-				Host: "test-ingress.com",
+				Host: service.ObjectMeta.Name + "." + service.ObjectMeta.Namespace + ".com",
 				IngressRuleValue: apiNetV1.IngressRuleValue{
 					HTTP: &apiNetV1.HTTPIngressRuleValue{
 						Paths: []apiNetV1.HTTPIngressPath{
@@ -170,7 +189,7 @@ func (c *controller) constructIngress(service *apiCoreV1.Service) *apiNetV1.Ingr
 										Name: service.Name,
 										Port: apiNetV1.ServiceBackendPort{
 											// Name: "ring",
-											Number: 80,
+											Number: port,
 										},
 									},
 								},
