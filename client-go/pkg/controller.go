@@ -4,6 +4,7 @@ import (
 	"context"
 	"reflect"
 	"time"
+	"fmt"
 
 	informer "k8s.io/client-go/informers/core/v1"
 
@@ -22,7 +23,7 @@ import (
 )
 
 const (
-	workNum  = 5
+	workNum  = 1
 	maxRetry = 5
 )
 
@@ -34,7 +35,7 @@ type controller struct {
 }
 
 func (c *controller) enqueue(obj interface{}) {
-	key, err := cache.MetaNamespaceKeyFunc(obj)
+	key, err := cache.MetaNamespaceKeyFunc(obj)  // key = "namespace"  + "/"" + "name"
 	if err != nil {
 		runtime.HandleError(err)
 	}
@@ -49,6 +50,7 @@ func (c *controller) updateService(oldObj interface{}, newObj interface{}) {
 	if reflect.DeepEqual(oldObj, newObj) {
 		return
 	}
+	fmt.Println("services update workqueue add")
 	c.enqueue(newObj)
 }
 
@@ -98,12 +100,12 @@ func (c *controller) syncService(key string) error {
 		return err
 	}
 
-	//delete
+	//delete  //判断该services  是否存在
 	service, err := c.serviceLister.Services(namespaceKey).Get(name)
 	if errors.IsNotFound(err) {
 		return nil
 	}
-
+	
 	if err != nil {
 		return err
 	}
@@ -119,6 +121,7 @@ func (c *controller) syncService(key string) error {
 		ig := c.constructIngress(service)
 		_, err := c.client.NetworkingV1().Ingresses(namespaceKey).Create(context.TODO(), ig, v13.CreateOptions{})
 		if err != nil {
+			fmt.Println(err) 
 			return err
 		}
 	} else if !ok && ingress != nil {

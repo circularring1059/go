@@ -3,15 +3,14 @@ package main
 import (
 	// "context"
 	"flag"
-	"fmt"
+	// "fmt"
 	"path/filepath"
-
-	"github.com/go/client-go/pkg"
 
 	//"time"
 
 	"k8s.io/client-go/informers"
 	// "k8s.io/client-go/tools/cache"
+	"github.com/go/client-go/pkg"
 
 	//"k8s.io/apimachinery/pkg/api/errors"
 	// metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -89,35 +88,33 @@ func main() {
 	// 	},
 	// })
 
-	
-
 	factory := informers.NewSharedInformerFactory(clientset, 0)
 	serviceInformer := factory.Core().V1().Services()
 	ingressInformer := factory.Networking().V1().Ingresses()
 	//事件处理
-	// ingressInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
+	// serviceInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
 	// 	AddFunc: func(obj interface{}) {
-	// 		fmt.Println("add event")
+	// 		fmt.Println("add event", obj)
 	// 	},
 
 	// 	UpdateFunc: func(oldObj, newObj interface{}) {
-	// 		fmt.Println("Update Event")
+	// 		fmt.Println("Update Event", oldObj, newObj)
+	// 		fmt.Printf("%T %T\n", oldObj, newObj)
 	// 	},
 
 	// 	DeleteFunc: func(obj interface{}) {
-	// 		fmt.Println("delete event")
+	// 		fmt.Println("delete event", obj)
 	// 	},
 	// })
 
-
-	//run informer
+	// run informer
 	// stopCache := make(chan struct{})
 	// factory.Start(stopCache)
 	// factory.WaitForCacheSync(stopCache)
 	// x := <-stopCache
 	// fmt.Println(x)
 
-	fmt.Println("strat job")
+	// fmt.Println("strat job")
 
 	controller := pkg.Newcontroller(clientset, serviceInformer, ingressInformer)
 	stopCh := make(chan struct{})
@@ -125,6 +122,5 @@ func main() {
 	factory.WaitForCacheSync(stopCh)
 
 	controller.Run(stopCh)
-	
 
 }
