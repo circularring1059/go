@@ -56,7 +56,7 @@ func (c *controller) updateService(oldObj interface{}, newObj interface{}) {
 
 func (c *controller) deleteIngress(obj interface{}) {
 	ingress := obj.(*v12.Ingress)
-	ownerReference := v13.GetControllerOf(ingress)
+	ownerReference := v13.GetControllerOf(ingress)  //func GetControllerOf(controllee Object) *OwnerReference
 	if ownerReference == nil {
 		return
 	}
