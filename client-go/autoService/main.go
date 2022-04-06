@@ -2,18 +2,19 @@ package main
 
 import (
 	// "context"
+	"context"
 	"flag"
 	"fmt"
 	"path/filepath"
 
 	//"time"
 
-	"k8s.io/client-go/informers"
+	// "k8s.io/client-go/informers"
 	// "k8s.io/client-go/tools/cache"
 	// "github.com/go/client-go/pkg"
 
 	//"k8s.io/apimachinery/pkg/api/errors"
-	// metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
@@ -49,7 +50,7 @@ func main() {
 		panic(err.Error())
 	}
 
-	//listPods
+	// listPods
 	// pods, err := clientset.CoreV1().Pods("default").List(context.TODO(), metav1.ListOptions{} )
 	// if err != nil {
 	// 	fmt.Println("list pods fail")
@@ -57,6 +58,14 @@ func main() {
 	// for _, pod := range pods.Items {
 	// 	fmt.Println(pod.Name)
 	// }
+
+	//get deplyment
+	deploymentIns, err := clientset.AppsV1().Deployments("default").Get(context.TODO(), "nginx", metav1.GetOptions{})
+	if err != nil {
+		return
+	}
+	fmt.Println(deploymentIns.Spec.Template.Spec.Containers[0].Ports)
+	fmt.Println(deploymentIns.Spec.Selector.MatchLabels)
 	
 	// //informer
 	// factory := informers.NewSharedInformerFactoryWithOptions(clientset, 0, informers.WithNamespace("default"))
@@ -78,11 +87,11 @@ func main() {
 	// })
 
 	//create informers
-	factory := informers.NewSharedInformerFactory(clientset, 0)
-	deploymentInformer := factory.Apps().V1().Deployments()
-	servicesInformer := factory.Core().V1().Services()
+	// factory := informers.NewSharedInformerFactory(clientset, 0)
+	// deploymentInformer := factory.Apps().V1().Deployments()
+	// servicesInformer := factory.Core().V1().Services()
 
-	fmt.Println(deploymentInformer,  servicesInformer)
+	// fmt.Println(deploymentInformer,  servicesInformer)
 
 	// run informer
 	// stopCache := make(chan struct{})
