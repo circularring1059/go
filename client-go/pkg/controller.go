@@ -135,7 +135,7 @@ func (c *controller) syncService(key string) error {
 	}
 
 	//add && delete
-	_, ok := service.GetAnnotations()["ingress/http"] //func (meta *ObjectMeta) GetAnnotations() map[string]string            { return meta.Annotations }
+	_, ok := service.GetAnnotations()["ingress/http"] //func (meta *ObjectMeta) GetAnnotations() map[string]string   { return meta.Annotations }
 	ingress, err := c.ingressLister.Ingresses(namespaceKey).Get(name)
 	if err != nil && !errors.IsNotFound(err) {
 		return err
@@ -178,6 +178,7 @@ func (c *controller) constructIngress(service *apiCoreV1.Service) *apiNetV1.Ingr
 		*metaV1.NewControllerRef(service, apiCoreV1.SchemeGroupVersion.WithKind("Service")),
 	}
 
+	//构造 ingress rescouce struct
 	ingress.ObjectMeta.Name = service.Name
 	ingress.ObjectMeta.Namespace = service.Namespace
 	pathType := apiNetV1.PathTypePrefix
