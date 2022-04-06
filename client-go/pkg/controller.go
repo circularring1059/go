@@ -3,8 +3,8 @@ package pkg
 import (
 	"context"
 	// "reflect"
-	"time"
 	"fmt"
+	"time"
 	// "strconv"
 
 	informer "k8s.io/client-go/informers/core/v1"
@@ -36,7 +36,7 @@ type controller struct {
 }
 
 func (c *controller) enqueue(obj interface{}) {
-	key, err := cache.MetaNamespaceKeyFunc(obj)  // key = "namespace"  + "/"" + "name"
+	key, err := cache.MetaNamespaceKeyFunc(obj) // key = "namespace"  + "/"" + "name"
 	if err != nil {
 		runtime.HandleError(err)
 	}
@@ -44,23 +44,23 @@ func (c *controller) enqueue(obj interface{}) {
 }
 
 func (c *controller) addService(obj interface{}) {
-	fmt.Println("found new  servies  add  workqueue")
+	// fmt.Println("found new  servies  add  workqueue")
 	c.enqueue(obj)
 }
 
 func (c *controller) updateService(oldObj interface{}, newObj interface{}) {
-	olDkeyService, _ :=  oldObj.(*apiCoreV1.Service).GetAnnotations()["ingress/http"]
-	neWkeyService, ok :=  newObj.(*apiCoreV1.Service).GetAnnotations()["ingress/http"]
+	olDkeyService, _ := oldObj.(*apiCoreV1.Service).GetAnnotations()["ingress/http"]
+	neWkeyService, ok := newObj.(*apiCoreV1.Service).GetAnnotations()["ingress/http"]
 	if !ok {
-		//annotation not found add workqueue 进行ingress  删除
+		//annotation not found add workqueue 进行ingress 删除
 		fmt.Println("annotation[ingress/htth] not found delete related ingress")
 		c.enqueue(newObj)
-	}else{
-		if  ok := CompareInsensitive(neWkeyService, olDkeyService); !ok {
-			fmt.Println("annotation[ingress/http] has changed add workqueue" )
+	} else {
+		if ok := CompareInsensitive(neWkeyService, olDkeyService); !ok {
+			fmt.Println("annotation[ingress/http] has changed add workqueue")
 			c.enqueue(newObj)
-		}else {
-			fmt.Println("annotation[ingress/http] not changed" )
+		} else {
+			fmt.Println("annotation[ingress/http] not changed")
 		}
 	}
 	// if reflect.DeepEqual(oldObj, newObj) {
@@ -74,12 +74,13 @@ func (c *controller) updateService(oldObj interface{}, newObj interface{}) {
 	// }else {
 	// 	fmt.Println("update service but annotation[ingress/http] not change")
 	// }
-		
+
 }
 
 func (c *controller) deleteIngress(obj interface{}) {
 	ingress := obj.(*apiNetV1.Ingress)
-	ownerReference := metaV1.GetControllerOf(ingress)  //func GetControllerOf(controllee Object) *OwnerReference
+	ownerReference := metaV1.GetControllerOf(ingress) //func GetControllerOf(controllee Object) *OwnerReference
+	// fmt.Println(ownerReference) //&OwnerReference{Kind:Service,Name:nginx1,UID:e9810cd2-73eb-44ce-8db1-42b4c330e13c,APIVersion:v1,Controller:*true,BlockOwnerDeletion:*true,}
 	if ownerReference == nil {
 		return
 	}
@@ -128,27 +129,28 @@ func (c *controller) syncService(key string) error {
 	if errors.IsNotFound(err) {
 		return nil
 	}
-	
+
 	if err != nil {
 		return err
 	}
 
 	//add && delete
-	_, ok := service.GetAnnotations()["ingress/http"]  //func (meta *ObjectMeta) GetAnnotations() map[string]string            { return meta.Annotations }
+	_, ok := service.GetAnnotations()["ingress/http"] //func (meta *ObjectMeta) GetAnnotations() map[string]string            { return meta.Annotations }
 	ingress, err := c.ingressLister.Ingresses(namespaceKey).Get(name)
 	if err != nil && !errors.IsNotFound(err) {
 		return err
 	}
 
 	if ok && errors.IsNotFound(err) {
-		fmt.Println("create ingress struct")
+		fmt.Println("create ingress")
 		ig := c.constructIngress(service)
 		_, err := c.client.NetworkingV1().Ingresses(namespaceKey).Create(context.TODO(), ig, metaV1.CreateOptions{})
 		if err != nil {
-			fmt.Println(err) 
+			fmt.Println(err)
 			return err
 		}
 	} else if !ok && ingress != nil {
+		fmt.Println("delete ingress")
 		err := c.client.NetworkingV1().Ingresses(namespaceKey).Delete(context.TODO(), name, metaV1.DeleteOptions{})
 		if err != nil {
 			return err
@@ -168,18 +170,10 @@ func (c *controller) HandleError(key string, err error) {
 }
 
 func (c *controller) constructIngress(service *apiCoreV1.Service) *apiNetV1.Ingress {
-	fmt.Println("debug")
-	// if port := service.GetAnnotations()["port"]; bool(port){
-	// 	fmt.Println(port)
-	// }
-	// var x int32 = 99
-	// port, err := strconv.ParseInt(service.GetAnnotations()["port"], 10, 32)
-	// if err != nil {
-	// 	port = x
-	// }
-	port := service.Spec.Ports[0].Port  //获取services ports 的第一个值作为ingres  的port
+	port := service.Spec.Ports[0].Port //获取services ports 的第一个值作为ingres  的port
 	ingress := apiNetV1.Ingress{}
 
+	//关联ownreferences, 当servies 删除时，ingress 也会删除
 	ingress.ObjectMeta.OwnerReferences = []metaV1.OwnerReference{
 		*metaV1.NewControllerRef(service, apiCoreV1.SchemeGroupVersion.WithKind("Service")),
 	}
@@ -241,16 +235,14 @@ func Newcontroller(client kubernetes.Interface, serviceInformer informer.Service
 
 }
 
-
 func CompareInsensitive(a, b string) bool {
-    if len(a) != len(b) {
-        return false
-    }
-
-    for i := 0; i < len(a); i++ {
-        if a[i] == b[i] {
-            continue
-        }
-    }
-    return true
+	if len(a) != len(b) {
+		return false
+	}
+	for i := 0; i < len(a); i++ {
+		if a[i] == b[i] {
+			continue
+		}
+	}
+	return true
 }
