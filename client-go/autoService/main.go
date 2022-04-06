@@ -2,19 +2,19 @@ package main
 
 import (
 	// "context"
-	"context"
+	// "context"
 	"flag"
 	"fmt"
 	"path/filepath"
 
 	//"time"
 
-	// "k8s.io/client-go/informers"
+	"k8s.io/client-go/informers"
 	// "k8s.io/client-go/tools/cache"
-	// "github.com/go/client-go/pkg"
+	"github.com/go/client-go/autoservice/controller"
 
 	//"k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	// metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
@@ -60,12 +60,12 @@ func main() {
 	// }
 
 	//get deplyment
-	deploymentIns, err := clientset.AppsV1().Deployments("default").Get(context.TODO(), "nginx", metav1.GetOptions{})
-	if err != nil {
-		return
-	}
-	fmt.Println(deploymentIns.Spec.Template.Spec.Containers[0].Ports)
-	fmt.Println(deploymentIns.Spec.Selector.MatchLabels)
+	// deploymentIns, err := clientset.AppsV1().Deployments("default").Get(context.TODO(), "nginx", metav1.GetOptions{})
+	// if err != nil {
+	// 	return
+	// }
+	// fmt.Println(deploymentIns.Spec.Template.Spec.Containers[0].Ports)
+	// fmt.Println(deploymentIns.Spec.Selector.MatchLabels)
 	
 	// //informer
 	// factory := informers.NewSharedInformerFactoryWithOptions(clientset, 0, informers.WithNamespace("default"))
@@ -87,9 +87,9 @@ func main() {
 	// })
 
 	//create informers
-	// factory := informers.NewSharedInformerFactory(clientset, 0)
-	// deploymentInformer := factory.Apps().V1().Deployments()
-	// servicesInformer := factory.Core().V1().Services()
+	factory := informers.NewSharedInformerFactory(clientset, 0)
+	deploymentInformer := factory.Apps().V1().Deployments()
+	servicesInformer := factory.Core().V1().Services()
 
 	// fmt.Println(deploymentInformer,  servicesInformer)
 
@@ -100,13 +100,13 @@ func main() {
 	// x := <-stopCache
 	// fmt.Println(x)
 
-	// fmt.Println("strat job")
+	fmt.Println("strat job")
 
-	// controller := pkg.Newcontroller(clientset, serviceInformer, ingressInformer)
-	// stopCh := make(chan struct{})
-	// factory.Start(stopCh)
-	// factory.WaitForCacheSync(stopCh)
+	controller := controller.Newcontroller(clientset, deploymentInformer, servicesInformer)
+	stopCh := make(chan struct{})
+	factory.Start(stopCh)
+	factory.WaitForCacheSync(stopCh)
 
-	// controller.Run(stopCh)
+	controller.Run(stopCh)
 
 }

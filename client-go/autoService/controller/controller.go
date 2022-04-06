@@ -2,23 +2,22 @@ package controller
 
 import (
 	"context"
-	"runtime/trace"
+	"time"
+	"fmt"
 
-	"golang.org/x/vuln/client"
 	ApiAppsV1 "k8s.io/api/apps/v1"
 	ApiCoreV1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/1.5/kubernetes"
-	"k8s.io/client-go/1.5/pkg/util/runtime"
-	AppsV1 "k8s.io/client-go/apps/v1"
-	informerAppV1 "k8s.io/client-go/iformeres/apps/v1"
-	informerCoreV1 "k8s.io/client-go/iformeres/core/v1"
+	informerAppV1 "k8s.io/client-go/informers/apps/v1"
+	informerCoreV1 "k8s.io/client-go/informers/core/v1"
 	"k8s.io/client-go/kubernetes"
 	listerAppV1 "k8s.io/client-go/listers/apps/v1"
 	listerCoreV1 "k8s.io/client-go/listers/core/v1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
+	"k8s.io/apimachinery/pkg/util/runtime"
+
 )
 
 const (
@@ -30,14 +29,13 @@ type controller struct {
 	client kubernetes.Interface
 	deploymentLister listerAppV1.DeploymentLister
 	serviceLister listerCoreV1.ServiceLister
-	queue  workqueue.DelayingInterface
-
+	queue  workqueue.RateLimitingInterface
 }
 
 func (c *controller)enqueue(obj interface{}){
 	key, err := cache.MetaNamespaceKeyFunc(obj)
 	if err != nil {
-		runtime.HandledError(err)
+		runtime.HandleError(err)
 	}
 	c.queue.Add(key)
 	
@@ -62,8 +60,8 @@ func (c *controller) processNextItem() bool {
 	return true
 }
 
-func  (c *controller) HandleError (){
-	if c.queue.NumRequeues(key) <= maxRety {
+func  (c *controller) HandleError (key string, err error){
+	if c.queue.NumRequeues(key) <= maxRetry {
 		c.queue.AddRateLimited(key)
 		return
 	}
@@ -77,12 +75,12 @@ func (c *controller) work () {
 
 }
 
-func syncDeployment(key string) error{
+func (c *controller) syncDeployment(key string) error{
 	namespacekey, name, err := cache.SplitMetaNamespaceKey(key)
 	if err != nil {
 		return err
 	}
-	deployment, err := c.deploymentLister.Deployment(namespacekey).Get(name)
+	deployment, err := c.deploymentLister.Deployments(namespacekey).Get(name)
 	if errors.IsNotFound(err) {
 		return nil
 	}
@@ -91,47 +89,54 @@ func syncDeployment(key string) error{
 		return err
 	}
 	_, ok := deployment.GetAnnotations()["createService"]
-	service, err := c.serviceLister(namespacekey).Get(name)
-	if err != nil && !erros.IsNotFound(err){
+	service, err := c.serviceLister.Services(namespacekey).Get(name)
+	if err != nil && !errors.IsNotFound(err){
 		return err
 	}
 	
 	if ok && errors.IsNotFound(err) {
-		sev := c.createService
-		_, err := c.client.CoreV1(namespacekey).Services().Create(context.t, svc, metaV1.CreateOptions{})
+		svc := c.CreateService(deployment)
+		_, err := c.client.CoreV1().Services(namespacekey).Create(context.TODO(), svc, metaV1.CreateOptions{})
 		if err != nil {
 			return err
 		}
 	}else if !ok  &&  service != nil {
-		err := c.client.CoreV1(namespacekey).Services().Delete(context.T, svc,  metaV1.DeleteOptions{})
+		err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), key,  metaV1.DeleteOptions{})
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
 	}
 
 }
-func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1Service{
-	service := &ApiCoreV1.service{
-		objectMeat: metaV1.Object{
-			Name:  deployment.ojbectMeta.Name,
-			Namespace:  deployment.objectMeta.Namespace,
-			OwnerReference:  []metaV1.OwnerReference{*metaV1.NewControllerRef(deployment, ApiAppsV1.SchemeGroupVersion.WithKind("Deployment"))}
-		}
-		spec: ApiCoreV1.ServiceSpec{
-			Ports: []ApiCoreV1.ServicePort{
-				{Name: deploy.objectMeta.Name, Port: 80, targetPort: 80,}
-			},
-			selector: *ApiAppsV1.Deployment.Spec.Selector.MatchLabels,
-		}
 
+func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.Service{
+	service := &ApiCoreV1.Service{
+		ObjectMeta: metaV1.Object{
+			Name:  deployment.ObjectMeta.Name,
+			Namespace:  deployment.objectMeta.Namespace,
+			OwnerReference:  []metaV1.OwnerReference{
+				{*metaV1.NewControllerRef(deployment, ApiAppsV1.SchemeGroupVersion.WithKind("Deployment"))},
+			},
+		},
+		Spec: ApiCoreV1.ServiceSpec{
+			Ports: []ApiCoreV1.ServicePort{
+				{Name: deployment.ObjectMeta.Name, Port: 80, TargetPort: 80,},
+			},
+			// selector: *ApiAppsV1.Deployment.Spec.Selector.MatchLabels,
+			selector: map[string]string{"one": "two"},
+		},
 	}
 }
 
 func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}){
-	oldKey, _:= oldObj.(*AppsV1.Deployment).GetAnnotations()["createService"]
-	newKey, ok := newObj.(*AppsV1.Deployment).GetAnnotations()["createService"]
+	oldKey, _:= oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
+	newKey, ok := newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
 	if !ok {
 		// add queue
 		c.enqueue(newObj)
 	}else {
-		if ok := CompareInsensitive(oldkey, newKey); !ok{
+		if ok := CompareInsensitive(oldKey, newKey); !ok{
 			//annotation change add  workqueue
 			c.enqueue(newObj)
 		}
@@ -140,7 +145,7 @@ func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}){
 }
 
 func (c *controller) deleteService(obj interface{}){
-	service := obj.(*ApiCoreV1.service)
+	service := obj.(*ApiCoreV1.Service)
 	ownerReference := metaV1.GetControllerOf(service)
 	if ownerReference == nil {
 		return
@@ -149,13 +154,15 @@ func (c *controller) deleteService(obj interface{}){
 		return
 	}
 	
+	//add key workqueue 重建services
+	c.enqueue(service.ObjectMeta.Namespace + "/" + service.ObjectMeta.Name)
 }
 
-func Newcontroller(client kubernetes.Interface, deploymentInformer informerAppV1.deploymentInformer, serviceInformer informerCoreV1.serviceInformer ) controller{
+func Newcontroller(client kubernetes.Interface, deploymentInformer informerAppV1.DeploymentInformer, serviceInformer informerCoreV1.ServiceInformer ) controller{
 	c := controller{
 		client: client,
 		deploymentLister: deploymentInformer.Lister(),
-		serviceLister: serviceInformer.Listter(),
+		serviceLister: serviceInformer.Lister(),
 		queue: workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), "queue"),
 	}
 
@@ -182,4 +189,11 @@ func CompareInsensitive(str1, str2 string) bool{
 		}
 	}
 	return true
+}
+
+func (c *controller) run(stopCache chan struct{}) {
+	for i := 0; i < workNum; i++ {
+		go wait.Until(c.work, time.Minute, stopCache)
+	}
+	<- stopCache
 }
