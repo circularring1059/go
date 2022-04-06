@@ -17,6 +17,8 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/apimachinery/pkg/util/wait"
+
 
 )
 
@@ -112,10 +114,10 @@ func (c *controller) syncDeployment(key string) error{
 
 func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.Service{
 	service := &ApiCoreV1.Service{
-		ObjectMeta: metaV1.Object{
+		ObjectMeta: metaV1.ObjectMeta{
 			Name:  deployment.ObjectMeta.Name,
-			Namespace:  deployment.objectMeta.Namespace,
-			OwnerReference:  []metaV1.OwnerReference{
+			Namespace:  deployment.ObjectMeta.Namespace,
+			OwnerReferences:  []metaV1.OwnerReference{
 				{*metaV1.NewControllerRef(deployment, ApiAppsV1.SchemeGroupVersion.WithKind("Deployment"))},
 			},
 		},
@@ -124,7 +126,7 @@ func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.
 				{Name: deployment.ObjectMeta.Name, Port: 80, TargetPort: 80,},
 			},
 			// selector: *ApiAppsV1.Deployment.Spec.Selector.MatchLabels,
-			selector: map[string]string{"one": "two"},
+			Selector: map[string]string{"one": "two"},
 		},
 	}
 }
@@ -172,7 +174,7 @@ func Newcontroller(client kubernetes.Interface, deploymentInformer informerAppV1
 		UpdateFunc:  c.updateDeployment,
 	})
 
-	serviceInformer.informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
+	serviceInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
 		DeleteFunc: c.deleteService,
 	})
 }
