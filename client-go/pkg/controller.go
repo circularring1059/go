@@ -2,7 +2,7 @@ package pkg
 
 import (
 	"context"
-	"reflect"
+	// "reflect"
 	"time"
 	"fmt"
 	// "strconv"
@@ -44,17 +44,32 @@ func (c *controller) enqueue(obj interface{}) {
 }
 
 func (c *controller) addService(obj interface{}) {
+	fmt.Println("found new  servies  add  workqueue")
 	c.enqueue(obj)
 }
 
 func (c *controller) updateService(oldObj interface{}, newObj interface{}) {
-	if reflect.DeepEqual(oldObj, newObj) {
-		return
+	olDkeyService, _ :=  oldObj.(*apiCoreV1.Service).GetAnnotations()["ingress/http"]
+	neWkeyService, ok :=  newObj.(*apiCoreV1.Service).GetAnnotations()["ingress/http"]
+	if !ok {
+		//annotation not found add workqueue 进行ingress  删除
+		fmt.Println("annotation[ingress/htth] not found delete related ingress")
+		c.enqueue(newObj)
+	}else{
+		if  ok := CompareInsensitive(neWkeyService, olDkeyService); !ok {
+			fmt.Println("annotation[ingress/http] has changed add workqueue" )
+			c.enqueue(newObj)
+		}else {
+			fmt.Println("annotation[ingress/http] not changed" )
+		}
 	}
+	// if reflect.DeepEqual(oldObj, newObj) {
+	// 	return
+	// }
 	// fmt.Println(oldObj, *newObj.GetAnnotations()["ingress/http"])
 	// fmt.Printf("%T %T", oldObj, newObj)
-	c.enqueue(newObj)
-		fmt.Println("services update workqueue add")
+	// c.enqueue(newObj)
+	// 	fmt.Println("services update workqueue add")
 	// if newObj.GetAnnotations()["ingress/http"] != oldObj.GetAnnotations()["ingress/http"] {
 	// }else {
 	// 	fmt.Println("update service but annotation[ingress/http] not change")
@@ -224,4 +239,18 @@ func Newcontroller(client kubernetes.Interface, serviceInformer informer.Service
 
 	return c
 
+}
+
+
+func CompareInsensitive(a, b string) bool {
+    if len(a) != len(b) {
+        return false
+    }
+
+    for i := 0; i < len(a); i++ {
+        if a[i] == b[i] {
+            continue
+        }
+    }
+    return true
 }
