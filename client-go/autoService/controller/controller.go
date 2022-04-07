@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 	"fmt"
+	"k8s.io/apimachinery/pkg/util/intstr"
 
 	ApiAppsV1 "k8s.io/api/apps/v1"
 	ApiCoreV1 "k8s.io/api/core/v1"
@@ -109,6 +110,7 @@ func (c *controller) syncDeployment(key string) error{
 			return err
 		}
 	}
+	return nil
 
 }
 
@@ -118,17 +120,22 @@ func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.
 			Name:  deployment.ObjectMeta.Name,
 			Namespace:  deployment.ObjectMeta.Namespace,
 			OwnerReferences:  []metaV1.OwnerReference{
-				{*metaV1.NewControllerRef(deployment, ApiAppsV1.SchemeGroupVersion.WithKind("Deployment"))},
+				*metaV1.NewControllerRef(deployment, ApiAppsV1.SchemeGroupVersion.WithKind("Deployment")),
 			},
 		},
 		Spec: ApiCoreV1.ServiceSpec{
 			Ports: []ApiCoreV1.ServicePort{
-				{Name: deployment.ObjectMeta.Name, Port: 80, TargetPort: 80,},
+				{Name: deployment.ObjectMeta.Name, Port: 80, TargetPort: intstr.IntOrString{
+					Type: intstr.Int,
+					IntVal: 80,
+				},},
 			},
 			// selector: *ApiAppsV1.Deployment.Spec.Selector.MatchLabels,
 			Selector: map[string]string{"one": "two"},
 		},
 	}
+
+	return service
 }
 
 func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}){
@@ -177,6 +184,8 @@ func Newcontroller(client kubernetes.Interface, deploymentInformer informerAppV1
 	serviceInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
 		DeleteFunc: c.deleteService,
 	})
+
+	return c
 }
 
 
@@ -193,7 +202,7 @@ func CompareInsensitive(str1, str2 string) bool{
 	return true
 }
 
-func (c *controller) run(stopCache chan struct{}) {
+func (c *controller) Run(stopCache chan struct{}) {
 	for i := 0; i < workNum; i++ {
 		go wait.Until(c.work, time.Minute, stopCache)
 	}
