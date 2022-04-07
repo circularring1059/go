@@ -25,7 +25,7 @@ import (
 
 const (
 	workNum = 2
-	maxRetry = 3
+	maxRetry = 1
 )
 
 type controller struct {
@@ -45,6 +45,36 @@ func (c *controller)enqueue(obj interface{}){
 }
 func (c *controller)addDeployment(obj interface{}){
 	c.enqueue(obj)
+}
+
+
+func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}){
+	oldKey, _:= oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
+	newKey, ok := newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
+	if !ok {
+		// add queue
+		c.enqueue(newObj)
+	}else {
+		if ok := CompareInsensitive(oldKey, newKey); !ok{
+			//annotation change add  workqueue
+			c.enqueue(newObj)
+		}
+	}
+
+}
+
+func (c *controller) deleteService(obj interface{}){
+	service := obj.(*ApiCoreV1.Service)
+	ownerReference := metaV1.GetControllerOf(service)
+	if ownerReference == nil {
+		return
+	}
+	if ownerReference.Kind !=  "Deployment" {
+		return
+	}
+	
+	//add key workqueue 重建services
+	c.queue.Add(service.ObjectMeta.Namespace + "/" + service.ObjectMeta.Name)
 }
 
 func (c *controller) processNextItem() bool {
@@ -103,10 +133,10 @@ func (c *controller) syncDeployment(key string) error{
 		if err != nil {
 			return err
 		}
-	}else if !ok  &&  service != nil {
-		err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), key,  metaV1.DeleteOptions{})
-		if err != nil {
-			fmt.Println(err)
+		}else if !ok  &&  service != nil {
+			err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name,  metaV1.DeleteOptions{})
+			if err != nil {
+				fmt.Println(err)
 			return err
 		}
 	}
@@ -138,34 +168,6 @@ func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.
 	return service
 }
 
-func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}){
-	oldKey, _:= oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
-	newKey, ok := newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
-	if !ok {
-		// add queue
-		c.enqueue(newObj)
-	}else {
-		if ok := CompareInsensitive(oldKey, newKey); !ok{
-			//annotation change add  workqueue
-			c.enqueue(newObj)
-		}
-	}
-
-}
-
-func (c *controller) deleteService(obj interface{}){
-	service := obj.(*ApiCoreV1.Service)
-	ownerReference := metaV1.GetControllerOf(service)
-	if ownerReference == nil {
-		return
-	}
-	if ownerReference.Kind !=  "Deployment" {
-		return
-	}
-	
-	//add key workqueue 重建services
-	c.enqueue(service.ObjectMeta.Namespace + "/" + service.ObjectMeta.Name)
-}
 
 func Newcontroller(client kubernetes.Interface, deploymentInformer informerAppV1.DeploymentInformer, serviceInformer informerCoreV1.ServiceInformer ) controller{
 	c := controller{
