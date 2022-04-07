@@ -36,6 +36,7 @@ type controller struct {
 
 func (c *controller) enqueue(obj interface{}) {
 	key, err := cache.MetaNamespaceKeyFunc(obj)
+	// fmt.Println(key)  //namespace + name
 	if err != nil {
 		runtime.HandleError(err)
 	}
@@ -48,13 +49,13 @@ func (c *controller) addDeployment(obj interface{}) {
 }
 
 func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}) {
-	oldKey, _ := oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
 	newKey, ok := newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
 	if !ok {
 		// add queue
 		fmt.Println("deployment without annotations")
 		c.enqueue(newObj)
-	} else {
+		} else {
+		oldKey, _ := oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
 		if ok := CompareInsensitive(oldKey, newKey); !ok {
 			//annotation change add  workqueue
 			fmt.Println("deployment annotation has changed")
@@ -68,6 +69,7 @@ func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}) {
 
 func (c *controller) deleteService(obj interface{}) {
 	service := obj.(*ApiCoreV1.Service)
+	// 通过controller 自动创建的services 会带有 ownerReference, 不会重建其他services
 	ownerReference := metaV1.GetControllerOf(service)
 	if ownerReference == nil {
 		return
@@ -77,7 +79,7 @@ func (c *controller) deleteService(obj interface{}) {
 	}
 
 	//add key workqueue 重建services
-	name := strings.Split(service.ObjectMeta.Name, "-")
+	name := strings.Split(service.ObjectMeta.Name, "-") //deployyemt 和services 不相同了，这里需要做下处理
 	c.queue.Add(service.ObjectMeta.Namespace + "/" + name[0])
 }
 
