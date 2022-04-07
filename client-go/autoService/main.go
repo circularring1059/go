@@ -1,7 +1,7 @@
 package main
 
 import (
-	// "context"
+	"context"
 	"flag"
 	"fmt"
 	"path/filepath"
@@ -13,7 +13,7 @@ import (
 	"github.com/go/client-go/autoservice/controller"
 
 	//"k8s.io/apimachinery/pkg/api/errors"
-	// metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
@@ -58,13 +58,13 @@ func main() {
 	// 	fmt.Println(pod.Name)
 	// }
 
-	//get deplyment
-	// deploymentIns, err := clientset.AppsV1().Deployments("default").Get(context.TODO(), "nginx", metav1.GetOptions{})
-	// if err != nil {
-	// 	return
-	// }
-	// fmt.Println(deploymentIns.Spec.Template.Spec.Containers[0].Ports)
-	// fmt.Println(deploymentIns.Spec.Selector.MatchLabels)
+	// get deplyment
+	deploymentIns, err := clientset.AppsV1().Deployments("default").Get(context.TODO(), "nginx", metav1.GetOptions{})
+	if err != nil {
+		return
+	}
+	fmt.Printf("%d\n",len(deploymentIns.Spec.Template.Spec.Containers[0].Ports))
+	fmt.Println(deploymentIns.Spec.Selector.MatchLabels)
 	
 	// //informer
 	// factory := informers.NewSharedInformerFactoryWithOptions(clientset, 0, informers.WithNamespace("default"))
@@ -109,3 +109,7 @@ func main() {
 	controller.Run(stopCh)
 
 }
+
+// func  getContainerPort(client, kubernetes.Interface)(int error){
+	
+// }
