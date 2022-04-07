@@ -48,7 +48,6 @@ func (c *controller)addDeployment(obj interface{}){
 	c.enqueue(obj)
 }
 
-
 func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}){
 	oldKey, _:= oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
 	newKey, ok := newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
@@ -61,6 +60,8 @@ func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}){
 			//annotation change add  workqueue
 			fmt.Println("deployment annotation has changed")
 			c.enqueue(newObj)
+		}else {
+			fmt.Println("deployment has chnaged but annotation not change")
 		}
 	}
 
@@ -125,7 +126,7 @@ func (c *controller) syncDeployment(key string) error{
 		return err
 	}
 	_, ok := deployment.GetAnnotations()["createService"]
-	service, err := c.serviceLister.Services(namespacekey).Get(name)
+	service, err := c.serviceLister.Services(namespacekey).Get(name+"-"+"auto-svc")
 	if err != nil && !errors.IsNotFound(err){
 		return err
 	}
@@ -137,9 +138,8 @@ func (c *controller) syncDeployment(key string) error{
 			return err
 		}
 		}else if !ok  &&  service != nil {
-			err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name,  metaV1.DeleteOptions{})
+			err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name+"-"+"auto-svc",  metaV1.DeleteOptions{})
 			if err != nil {
-				fmt.Println(err)
 			return err
 		}
 	}
@@ -150,7 +150,7 @@ func (c *controller) syncDeployment(key string) error{
 func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.Service{
 	service := &ApiCoreV1.Service{
 		ObjectMeta: metaV1.ObjectMeta{
-			Name:  deployment.ObjectMeta.Name,
+			Name:  deployment.ObjectMeta.Name + "-" + "auto-svc",
 			Namespace:  deployment.ObjectMeta.Namespace,
 			OwnerReferences:  []metaV1.OwnerReference{
 				*metaV1.NewControllerRef(deployment, ApiAppsV1.SchemeGroupVersion.WithKind("Deployment")),
@@ -158,13 +158,12 @@ func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.
 		},
 		Spec: ApiCoreV1.ServiceSpec{
 			Ports: []ApiCoreV1.ServicePort{
-				{Name: deployment.ObjectMeta.Name, Port: 80, TargetPort: intstr.IntOrString{
+				{Name: deployment.ObjectMeta.Name, Port: deployment.Spec.Template.Spec.Containers[0].Ports[0].ContainerPort, TargetPort: intstr.IntOrString{
 					Type: intstr.Int,
-					IntVal: 80,
+					IntVal: deployment.Spec.Template.Spec.Containers[0].Ports[0].ContainerPort,
 				},},
 			},
-			// selector: *ApiAppsV1.Deployment.Spec.Selector.MatchLabels,
-			Selector: map[string]string{"one": "two"},
+			Selector: deployment.Spec.Selector.MatchLabels,
 		},
 	}
 
