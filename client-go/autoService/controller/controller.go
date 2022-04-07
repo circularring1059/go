@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 	"fmt"
+	"strings"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
 	ApiAppsV1 "k8s.io/api/apps/v1"
@@ -78,7 +79,9 @@ func (c *controller) deleteService(obj interface{}){
 	}
 	
 	//add key workqueue 重建services
-	c.queue.Add(service.ObjectMeta.Namespace + "/" + service.ObjectMeta.Name)
+	name := strings.Split(service.ObjectMeta.Name, "-")
+	fmt.Println(service.ObjectMeta.Namespace, name)
+	c.queue.Add(service.ObjectMeta.Namespace + "/" + name[0])
 }
 
 func (c *controller) processNextItem() bool {
