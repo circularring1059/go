@@ -44,6 +44,7 @@ func (c *controller)enqueue(obj interface{}){
 	
 }
 func (c *controller)addDeployment(obj interface{}){
+	// fmt.Println("lister new deploy")
 	c.enqueue(obj)
 }
 
@@ -53,10 +54,12 @@ func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}){
 	newKey, ok := newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
 	if !ok {
 		// add queue
+		fmt.Println("deployment without annotations")
 		c.enqueue(newObj)
 	}else {
 		if ok := CompareInsensitive(oldKey, newKey); !ok{
 			//annotation change add  workqueue
+			fmt.Println("deployment annotation has changed")
 			c.enqueue(newObj)
 		}
 	}
