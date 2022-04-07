@@ -3,9 +3,11 @@ package controller
 import (
 	"context"
 	"fmt"
-	"k8s.io/apimachinery/pkg/util/intstr"
+	"strconv"
 	"strings"
 	"time"
+
+	"k8s.io/apimachinery/pkg/util/intstr"
 
 	ApiAppsV1 "k8s.io/api/apps/v1"
 	ApiCoreV1 "k8s.io/api/core/v1"
@@ -171,6 +173,15 @@ func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.
 			Selector: deployment.Spec.Selector.MatchLabels,
 		},
 	}
+	map1 :=  make([]ApiCoreV1.ServicePort, 0, 0)
+	for i:= 0; i < len(deployment.Spec.Template.Spec.Containers[0].Ports); i++ {
+		map1 = append(map1, ApiCoreV1.ServicePort{
+			Name: deployment.ObjectMeta.Name + strconv.Itoa(i), Port: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort, TargetPort: intstr.IntOrString{
+				Type:   intstr.Int,
+				IntVal: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort,},
+		},)
+	}
+	fmt.Println(map1)
 
 	return service
 }
