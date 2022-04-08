@@ -155,6 +155,22 @@ func (c *controller) syncDeployment(key string) error {
 }
 
 func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.Service {
+	containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports)
+	//获取第一个container 下的ports 作为services 的port
+	ports :=  make([]ApiCoreV1.ServicePort, containerPortLength, containerPortLength)
+	for i:= 0; i < containerPortLength; i++ {
+		// map1 = append(map1, ApiCoreV1.ServicePort{
+		// 	Name: deployment.ObjectMeta.Name + strconv.Itoa(i), Port: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort, TargetPort: intstr.IntOrString{
+		// 		Type:   intstr.Int,
+		// 		IntVal: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort,},
+		// },)
+		ports[i] = ApiCoreV1.ServicePort{
+				Name: deployment.ObjectMeta.Name + "-" + strconv.Itoa(i), Port: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort, TargetPort: intstr.IntOrString{
+					Type:   intstr.Int,
+					IntVal: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort,},
+			}
+	}
+
 	service := &ApiCoreV1.Service{
 		ObjectMeta: metaV1.ObjectMeta{
 			Name:      deployment.ObjectMeta.Name + "-" + "auto-svc",
@@ -164,25 +180,21 @@ func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.
 			},
 		},
 		Spec: ApiCoreV1.ServiceSpec{
-			Ports: []ApiCoreV1.ServicePort{
-				{Name: deployment.ObjectMeta.Name, Port: deployment.Spec.Template.Spec.Containers[0].Ports[0].ContainerPort, TargetPort: intstr.IntOrString{
-					Type:   intstr.Int,
-					IntVal: deployment.Spec.Template.Spec.Containers[0].Ports[0].ContainerPort,
-				}},
-			},
+			// Ports: []ApiCoreV1.ServicePort{
+			// 	{Name: deployment.ObjectMeta.Name, Port: deployment.Spec.Template.Spec.Containers[0].Ports[0].ContainerPort, TargetPort: intstr.IntOrString{
+			// 		Type:   intstr.Int,
+			// 		IntVal: deployment.Spec.Template.Spec.Containers[0].Ports[0].ContainerPort,
+			// 	}},
+			// },
+			Ports: ports,
 			Selector: deployment.Spec.Selector.MatchLabels,
 		},
 	}
-	map1 :=  make([]ApiCoreV1.ServicePort, 0, 0)
-	for i:= 0; i < len(deployment.Spec.Template.Spec.Containers[0].Ports); i++ {
-		map1 = append(map1, ApiCoreV1.ServicePort{
-			Name: deployment.ObjectMeta.Name + strconv.Itoa(i), Port: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort, TargetPort: intstr.IntOrString{
-				Type:   intstr.Int,
-				IntVal: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort,},
-		},)
-	}
-	fmt.Println(map1)
 
+	
+	// service.Spec = ApiCoreV1.ServiceSpec{
+	// 	Ports: ports,
+	// }
 	return service
 }
 
