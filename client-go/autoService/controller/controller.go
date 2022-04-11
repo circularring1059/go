@@ -3,6 +3,7 @@ package controller
 import (
 	"context"
 	"fmt"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -46,8 +47,27 @@ func (c *controller) enqueue(obj interface{}) {
 
 }
 func (c *controller) addDeployment(obj interface{}) {
-	// fmt.Println("lister new deploy")
+	// fmt.Println("listen new deploy")
 	c.enqueue(obj)
+}
+
+func (c *controller) updateService(oldObj interface{}, newObj interface{}) {
+	if ok := reflect.DeepEqual(oldObj, newObj); !ok {
+		fmt.Println(newObj)
+		// 通过controller 自动创建的services 会带有 ownerReference, 不会重建其他services
+		service := newObj.(*ApiCoreV1.Service)
+		ownerReference := metaV1.GetControllerOf(service)
+		if ownerReference == nil {
+			return
+		}
+		if ownerReference.Kind != "Deployment" {
+			return
+		}
+
+		//add key workqueue 重建services
+		name := strings.Split(service.ObjectMeta.Name, "-") //deployyemt 和services 名字不相同了，这里需要做下处理
+		c.queue.Add("update-" + service.ObjectMeta.Namespace + "/" + name[0])
+	}
 }
 
 func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}) {
@@ -56,7 +76,7 @@ func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}) {
 		// add queue
 		fmt.Println("deployment without annotations")
 		c.enqueue(newObj)
-		} else {
+	} else {
 		oldKey, _ := oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
 		if ok := CompareInsensitive(oldKey, newKey); !ok {
 			//annotation change add  workqueue
@@ -66,7 +86,6 @@ func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}) {
 			fmt.Println("deployment has chnaged but annotation not change")
 		}
 	}
-
 }
 
 func (c *controller) deleteService(obj interface{}) {
@@ -81,7 +100,7 @@ func (c *controller) deleteService(obj interface{}) {
 	}
 
 	//add key workqueue 重建services
-	name := strings.Split(service.ObjectMeta.Name, "-") //deployyemt 和services 不相同了，这里需要做下处理
+	name := strings.Split(service.ObjectMeta.Name, "-") //deployyemt 和services 名字不相同了，这里需要做下处理
 	c.queue.Add(service.ObjectMeta.Namespace + "/" + name[0])
 }
 
@@ -116,10 +135,18 @@ func (c *controller) work() {
 }
 
 func (c *controller) syncDeployment(key string) error {
+	update := false
 	namespacekey, name, err := cache.SplitMetaNamespaceKey(key)
+	if ok := strings.HasPrefix(namespacekey, "update"); ok {
+		namespacekey = strings.Split(namespacekey, "-")[1]
+		update = true
+
+	}
+
 	if err != nil {
 		return err
 	}
+
 	deployment, err := c.deploymentLister.Deployments(namespacekey).Get(name)
 	if errors.IsNotFound(err) {
 		return nil
@@ -132,6 +159,15 @@ func (c *controller) syncDeployment(key string) error {
 	service, err := c.serviceLister.Services(namespacekey).Get(name + "-" + "auto-svc")
 	if err != nil && !errors.IsNotFound(err) {
 		return err
+	}
+
+	//手动修改services 后该services 将会被删除，调谐至起始状态
+	if update && service != nil {
+		err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name+"-"+"auto-svc", metaV1.DeleteOptions{})
+		fmt.Println("delete services")
+		if err != nil {
+			return err
+		}
 	}
 
 	if ok && errors.IsNotFound(err) {
@@ -157,18 +193,18 @@ func (c *controller) syncDeployment(key string) error {
 func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.Service {
 	containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports)
 	//获取第一个container 下的ports 作为services 的port
-	ports :=  make([]ApiCoreV1.ServicePort, containerPortLength, containerPortLength)
-	for i:= 0; i < containerPortLength; i++ {
+	ports := make([]ApiCoreV1.ServicePort, containerPortLength, containerPortLength)
+	for i := 0; i < containerPortLength; i++ {
 		// map1 = append(map1, ApiCoreV1.ServicePort{
 		// 	Name: deployment.ObjectMeta.Name + strconv.Itoa(i), Port: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort, TargetPort: intstr.IntOrString{
 		// 		Type:   intstr.Int,
 		// 		IntVal: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort,},
 		// },)
 		ports[i] = ApiCoreV1.ServicePort{
-				Name: deployment.ObjectMeta.Name + "-" + strconv.Itoa(i), Port: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort, TargetPort: intstr.IntOrString{
-					Type:   intstr.Int,
-					IntVal: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort,},
-			}
+			Name: deployment.ObjectMeta.Name + "-" + strconv.Itoa(i), Port: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort, TargetPort: intstr.IntOrString{
+				Type:   intstr.Int,
+				IntVal: deployment.Spec.Template.Spec.Containers[0].Ports[i].ContainerPort},
+		}
 	}
 
 	service := &ApiCoreV1.Service{
@@ -186,12 +222,11 @@ func (c *controller) CreateService(deployment *ApiAppsV1.Deployment) *ApiCoreV1.
 			// 		IntVal: deployment.Spec.Template.Spec.Containers[0].Ports[0].ContainerPort,
 			// 	}},
 			// },
-			Ports: ports,
+			Ports:    ports,
 			Selector: deployment.Spec.Selector.MatchLabels,
 		},
 	}
 
-	
 	// service.Spec = ApiCoreV1.ServiceSpec{
 	// 	Ports: ports,
 	// }
@@ -214,6 +249,7 @@ func Newcontroller(client kubernetes.Interface, deploymentInformer informerAppV1
 
 	serviceInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
 		DeleteFunc: c.deleteService,
+		UpdateFunc: c.updateService,
 	})
 
 	return c
