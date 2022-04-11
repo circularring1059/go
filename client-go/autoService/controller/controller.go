@@ -78,7 +78,8 @@ func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}) {
 		c.enqueue(newObj)
 	} else {
 		oldKey, _ := oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
-		if ok := CompareInsensitive(oldKey, newKey); !ok {
+		isTheSamePorts := reflect.DeepEqual(oldObj.(*ApiAppsV1.Deployment).Spec.Template.Spec.Containers[0].Ports, oldObj.(*ApiAppsV1.Deployment).Spec.Template.Spec.Containers[0].Ports)
+		if ok := CompareInsensitive(oldKey, newKey); !ok || !isTheSamePorts {
 			//annotation change add  workqueue
 			fmt.Println("deployment annotation has changed")
 			c.enqueue(newObj)
