@@ -71,22 +71,26 @@ func (c *controller) updateService(oldObj interface{}, newObj interface{}) {
 }
 
 func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}) {
-	newKey, ok := newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
-	if !ok {
-		// add queue
-		fmt.Println("deployment without annotations")
+	newKey, _ := newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
+	oldKey, _ := oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
+	if ok := CompareInsensitive(newKey, oldKey);  !ok {
 		c.enqueue(newObj)
-	} else {
-		oldKey, _ := oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
-		isTheSamePorts := reflect.DeepEqual(oldObj.(*ApiAppsV1.Deployment).Spec.Template.Spec.Containers[0].Ports, oldObj.(*ApiAppsV1.Deployment).Spec.Template.Spec.Containers[0].Ports)
-		if ok := CompareInsensitive(oldKey, newKey); !ok || !isTheSamePorts {
-			//annotation change add  workqueue
-			fmt.Println("deployment annotation has changed")
-			c.enqueue(newObj)
-		} else {
-			fmt.Println("deployment has chnaged but annotation not change")
-		}
 	}
+	// if !ok {
+	// 	// add queue
+	// 	fmt.Println("deployment without annotations")
+	// 	c.enqueue(newObj)
+	// } else {
+	// 	oldKey, _ := oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
+	// 	isTheSamePorts := reflect.DeepEqual(oldObj.(*ApiAppsV1.Deployment).Spec.Template.Spec.Containers[0].Ports, oldObj.(*ApiAppsV1.Deployment).Spec.Template.Spec.Containers[0].Ports)
+	// 	if ok := CompareInsensitive(oldKey, newKey); !ok || !isTheSamePorts {
+	// 		//annotation change add  workqueue
+	// 		fmt.Println("deployment annotation has changed")
+	// 		c.enqueue(newObj)
+	// 	} else {
+	// 		fmt.Println("deployment has chnaged but annotation not change")
+	// 	}
+	// }
 }
 
 func (c *controller) deleteService(obj interface{}) {
@@ -156,7 +160,7 @@ func (c *controller) syncDeployment(key string) error {
 	if err != nil {
 		return err
 	}
-	_, ok := deployment.GetAnnotations()["createService"]
+	created, _ := deployment.GetAnnotations()["createService"]
 	service, err := c.serviceLister.Services(namespacekey).Get(name + "-" + "auto-svc")
 	if err != nil && !errors.IsNotFound(err) {
 		return err
@@ -171,17 +175,18 @@ func (c *controller) syncDeployment(key string) error {
 		}
 	}
 
-	if ok && errors.IsNotFound(err) {
+	if created == "true" && errors.IsNotFound(err) {
 		if containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports); containerPortLength == 0 {
 			fmt.Println("deployment:", deployment.GetObjectMeta().GetName(), "may not set ports it will not create auto svc")
 			return nil
 		}
 		svc := c.CreateService(deployment)
 		_, err := c.client.CoreV1().Services(namespacekey).Create(context.TODO(), svc, metaV1.CreateOptions{})
+		// _, err := c.client.CoreV1().Services(namespacekey).A
 		if err != nil {
 			return err
 		}
-	} else if !ok && service != nil {
+	} else if created != "true" && service != nil {
 		err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name+"-"+"auto-svc", metaV1.DeleteOptions{})
 		if err != nil {
 			return err
