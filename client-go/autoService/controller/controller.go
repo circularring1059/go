@@ -73,7 +73,9 @@ func (c *controller) updateService(oldObj interface{}, newObj interface{}) {
 func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}) {
 	newKey, _ := newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
 	oldKey, _ := oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
-	if ok := CompareInsensitive(newKey, oldKey);  !ok {
+	isTheSamePorts := reflect.DeepEqual(oldObj.(*ApiAppsV1.Deployment).Spec.Template.Spec.Containers[0].Ports, oldObj.(*ApiAppsV1.Deployment).Spec.Template.Spec.Containers[0].Ports)
+	if ok := CompareInsensitive(newKey, oldKey);  !ok || isTheSamePorts {
+		fmt.Println("update deploy")
 		c.enqueue(newObj)
 	}
 	// if !ok {
@@ -175,23 +177,64 @@ func (c *controller) syncDeployment(key string) error {
 		}
 	}
 
-	if created == "true" && errors.IsNotFound(err) {
+	// if created == "true" && errors.IsNotFound(err) {
+	// 	if containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports); containerPortLength == 0 {
+	// 		fmt.Println("deployment:", deployment.GetObjectMeta().GetName(), "may not set ports it will not create auto svc")
+	// 		return nil
+	// 	}
+	// 	svc := c.CreateService(deployment)
+	// 	_, err := c.client.CoreV1().Services(namespacekey).Create(context.TODO(), svc, metaV1.CreateOptions{})
+	// 	// _, err := c.client.CoreV1().Services(namespacekey).A
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// } else if created != "true" && service != nil {
+	// 	err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name+"-"+"auto-svc", metaV1.DeleteOptions{})
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// }
+	
+	if created == "true" && errors.IsNotFound(err)  {
 		if containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports); containerPortLength == 0 {
 			fmt.Println("deployment:", deployment.GetObjectMeta().GetName(), "may not set ports it will not create auto svc")
 			return nil
 		}
 		svc := c.CreateService(deployment)
 		_, err := c.client.CoreV1().Services(namespacekey).Create(context.TODO(), svc, metaV1.CreateOptions{})
-		// _, err := c.client.CoreV1().Services(namespacekey).A
 		if err != nil {
 			return err
 		}
-	} else if created != "true" && service != nil {
+	}
+	if created == "true"  && service != nil {
+		if containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports); containerPortLength == 0 {
+			fmt.Println("deployment:", deployment.GetObjectMeta().GetName(), "may not set ports it will not create auto svc")
+			return nil
+		}
+		//这里将services  删除后会构建新的services 完成更新
+		err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name+"-"+"auto-svc", metaV1.DeleteOptions{})
+		if err != nil {
+			return err
+		}
+		// svc := c.CreateService(deployment)
+		// _, err = c.client.CoreV1().Services(namespacekey).Create(context.TODO(), svc, metaV1.CreateOptions{})
+		// if err != nil {
+		// 	return err
+		// }
+	}
+	if created != "true" && service != nil {
 		err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name+"-"+"auto-svc", metaV1.DeleteOptions{})
 		if err != nil {
 			return err
 		}
 	}
+	if containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports); containerPortLength == 0 && service != nil{
+		err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name+"-"+"auto-svc", metaV1.DeleteOptions{})
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 
 }
