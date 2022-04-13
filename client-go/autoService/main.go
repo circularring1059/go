@@ -10,11 +10,12 @@ import (
 
 	"k8s.io/client-go/informers"
 	// "k8s.io/client-go/tools/cache"
-	"github.com/go/client-go/autoservice/controller"
+	// "github.com/go/client-go/autoservice/controller"
 
 	//"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 	//
@@ -88,25 +89,38 @@ func main() {
 	//create informers
 	factory := informers.NewSharedInformerFactory(clientset, 0)
 	deploymentInformer := factory.Apps().V1().Deployments()
-	servicesInformer := factory.Core().V1().Services()
+	deploymentInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
+		// AddFunc: func(obj interface{}) {
+		// 	fmt.Println("add event")
+		// },
+
+		UpdateFunc: func(oldObj, newObj interface{}) {
+			fmt.Println("Update Event")
+		},
+
+		// DeleteFunc: func(obj interface{}) {
+		// 	fmt.Println("delete event")
+		// },
+	})
+	// servicesInformer := factory.Core().V1().Services()
 
 	// fmt.Println(deploymentInformer,  servicesInformer)
 
 	// run informer
-	// stopCache := make(chan struct{})
-	// factory.Start(stopCache)
-	// factory.WaitForCacheSync(stopCache)
-	// x := <-stopCache
-	// fmt.Println(x)
+	stopCache := make(chan struct{})
+	factory.Start(stopCache)
+	factory.WaitForCacheSync(stopCache)
+	x := <-stopCache
+	fmt.Println(x)
 
-	fmt.Println("strat job")
+	// fmt.Println("strat job")
 
-	controller := controller.Newcontroller(clientset, deploymentInformer, servicesInformer)
-	stopCh := make(chan struct{})
-	factory.Start(stopCh)
-	factory.WaitForCacheSync(stopCh)
+	// controller := controller.Newcontroller(clientset, deploymentInformer, servicesInformer)
+	// stopCh := make(chan struct{})
+	// factory.Start(stopCh)
+	// factory.WaitForCacheSync(stopCh)
 
-	controller.Run(stopCh)
+	// controller.Run(stopCh)
 
 }
 
