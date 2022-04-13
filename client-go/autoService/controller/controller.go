@@ -66,7 +66,8 @@ func (c *controller) updateService(oldObj interface{}, newObj interface{}) {
 
 		//add key workqueue 重建services
 		name := strings.Split(service.ObjectMeta.Name, "-") //deployyemt 和services 名字不相同了，这里需要做下处理
-		c.queue.Add("update-" + service.ObjectMeta.Namespace + "/" + name[0])
+		// c.queue.Add("update-" + service.ObjectMeta.Namespace + "/" + name[0])
+		c.queue.Add(service.ObjectMeta.Namespace + "/" + name[0])
 	}
 }
 
@@ -142,13 +143,13 @@ func (c *controller) work() {
 }
 
 func (c *controller) syncDeployment(key string) error {
-	update := false
+	// update := false
 	namespacekey, name, err := cache.SplitMetaNamespaceKey(key)
-	if ok := strings.HasPrefix(namespacekey, "update"); ok {
-		namespacekey = strings.Split(namespacekey, "-")[1]
-		update = true
+	// if ok := strings.HasPrefix(namespacekey, "update"); ok {
+	// 	namespacekey = strings.Split(namespacekey, "-")[1]
+	// 	update = true
 
-	}
+	// }
 
 	if err != nil {
 		return err
@@ -169,13 +170,13 @@ func (c *controller) syncDeployment(key string) error {
 	}
 
 	//手动修改services 后该services 将会被删除，调谐至起始状态
-	if update && service != nil {
-		err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name+"-"+"auto-svc", metaV1.DeleteOptions{})
-		fmt.Println("delete services")
-		if err != nil {
-			return err
-		}
-	}
+	// if update && service != nil {
+	// 	err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name+"-"+"auto-svc", metaV1.DeleteOptions{})
+	// 	fmt.Println("delete services")
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// }
 
 	// if created == "true" && errors.IsNotFound(err) {
 	// 	if containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports); containerPortLength == 0 {
