@@ -72,10 +72,11 @@ func (c *controller) updateService(oldObj interface{}, newObj interface{}) {
 }
 
 func (c *controller) updateDeployment(oldObj interface{}, newObj interface{}) {
-	newKey, _ := newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
-	oldKey, _ := oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
+	// newKey, _ := newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
+	// oldKey, _ := oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"]
+	isThesameAnnotation := strings.Compare(oldObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"], newObj.(*ApiAppsV1.Deployment).GetAnnotations()["createService"])
 	isTheSamePorts := reflect.DeepEqual(oldObj.(*ApiAppsV1.Deployment).Spec.Template.Spec.Containers[0].Ports, oldObj.(*ApiAppsV1.Deployment).Spec.Template.Spec.Containers[0].Ports)
-	if ok := CompareInsensitive(newKey, oldKey);  !ok || isTheSamePorts {
+	if isThesameAnnotation == -1 || isTheSamePorts {
 		fmt.Println("update deploy")
 		c.enqueue(newObj)
 	}
@@ -238,8 +239,9 @@ func (c *controller) syncDeployment(key string) error {
 	// }
 
 	containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports)
+	// ret := strings.Compare(created, "true")
     if service != nil {
-		if containerPortLength <= 0 || created != "true" {
+		if containerPortLength <= 0 || strings.Compare(created, "true") == 0 {
 			 err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name + "-" + "auto-svc", metaV1.DeleteOptions{})
 			 if err != nil {
 				 return err
@@ -247,7 +249,7 @@ func (c *controller) syncDeployment(key string) error {
 		}
 	}
 	
-	if containerPortLength > 0 && created == "true" && errors.IsNotFound(err) {
+	if containerPortLength > 0 && strings.Compare(created, "true") == 0 && errors.IsNotFound(err) {
 		// 创建 service
 		svc := c.CreateService(deployment)
 		_, err := c.client.CoreV1().Services(namespacekey).Create(context.TODO(), svc, metaV1.CreateOptions{})
@@ -256,7 +258,7 @@ func (c *controller) syncDeployment(key string) error {
 		}
 	}
 
-	if containerPortLength >0 && created == "true" && service != nil {
+	if containerPortLength >0 && strings.Compare(created, "true") == 0 && service != nil {
 		// 删除servie 产生 delete event  
 		err :=  c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name + "-" + "auto-svc", metaV1.DeleteOptions{})
 		if err != nil {
@@ -333,18 +335,18 @@ func Newcontroller(client kubernetes.Interface, deploymentInformer informerAppV1
 	return c
 }
 
-func CompareInsensitive(str1, str2 string) bool {
-	if len(str1) != len(str2) {
-		return false
-	}
+// func CompareInsensitive(str1, str2 string) bool {
+// 	if len(str1) != len(str2) {
+// 		return false
+// 	}
 
-	for i := 0; i < len(str1); i++ {
-		if str1[i] != str2[i] {
-			return false
-		}
-	}
-	return true
-}
+// 	for i := 0; i < len(str1); i++ {
+// 		if str1[i] != str2[i] {
+// 			return false
+// 		}
+// 	}
+// 	return true
+// }
 
 func (c *controller) Run(stopCache chan struct{}) {
 	for i := 0; i < workNum; i++ {
