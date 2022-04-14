@@ -1,7 +1,7 @@
 package main
 
 import (
-	"context"
+	// "context"
 	"flag"
 	"fmt"
 	"path/filepath"
@@ -10,12 +10,12 @@ import (
 
 	"k8s.io/client-go/informers"
 	// "k8s.io/client-go/tools/cache"
-	// "github.com/go/client-go/autoservice/controller"
+	"github.com/go/client-go/autoservice/controller"
 
 	//"k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	// metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/cache"
+	// "k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 	//
@@ -60,12 +60,12 @@ func main() {
 	// }
 
 	// get deplyment
-	deploymentIns, err := clientset.AppsV1().Deployments("default").Get(context.TODO(), "nginx", metav1.GetOptions{})
-	if err != nil {
-		return
-	}
-	fmt.Printf("%d\n",len(deploymentIns.Spec.Template.Spec.Containers[0].Ports))
-	fmt.Println(deploymentIns.Spec.Selector.MatchLabels)
+	// deploymentIns, err := clientset.AppsV1().Deployments("default").Get(context.TODO(), "nginx", metav1.GetOptions{})
+	// if err != nil {
+	// 	return
+	// }
+	// fmt.Printf("%d\n",len(deploymentIns.Spec.Template.Spec.Containers[0].Ports))
+	// fmt.Println(deploymentIns.Spec.Selector.MatchLabels)
 	
 	// //informer
 	// factory := informers.NewSharedInformerFactoryWithOptions(clientset, 0, informers.WithNamespace("default"))
@@ -89,41 +89,38 @@ func main() {
 	//create informers
 	factory := informers.NewSharedInformerFactory(clientset, 0)
 	deploymentInformer := factory.Apps().V1().Deployments()
-	deploymentInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
-		// AddFunc: func(obj interface{}) {
-		// 	fmt.Println("add event")
-		// },
+	// deploymentInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
+	// 	// AddFunc: func(obj interface{}) {
+	// 	// 	fmt.Println("add event")
+	// 	// },
 
-		UpdateFunc: func(oldObj, newObj interface{}) {
-			fmt.Println("Update Event")
-		},
+	// 	UpdateFunc: func(oldObj, newObj interface{}) {
+	// 		fmt.Println("Update Event")
+	// 	},
 
-		// DeleteFunc: func(obj interface{}) {
-		// 	fmt.Println("delete event")
-		// },
-	})
-	// servicesInformer := factory.Core().V1().Services()
+	// 	// DeleteFunc: func(obj interface{}) {
+	// 	// 	fmt.Println("delete event")
+	// 	// },
+	// })
+	servicesInformer := factory.Core().V1().Services()
 
 	// fmt.Println(deploymentInformer,  servicesInformer)
 
 	// run informer
-	stopCache := make(chan struct{})
-	factory.Start(stopCache)
-	factory.WaitForCacheSync(stopCache)
-	x := <-stopCache
-	fmt.Println(x)
+	// stopCache := make(chan struct{})
+	// factory.Start(stopCache)
+	// factory.WaitForCacheSync(stopCache)
+	// x := <-stopCache
+	// fmt.Println(x)
 
-	// fmt.Println("strat job")
+	fmt.Println("strat job")
 
-	// controller := controller.Newcontroller(clientset, deploymentInformer, servicesInformer)
-	// stopCh := make(chan struct{})
-	// factory.Start(stopCh)
-	// factory.WaitForCacheSync(stopCh)
+	controller := controller.Newcontroller(clientset, deploymentInformer, servicesInformer)
+	stopCh := make(chan struct{})
+	factory.Start(stopCh)
+	factory.WaitForCacheSync(stopCh)
 
-	// controller.Run(stopCh)
+	controller.Run(stopCh)
 
 }
 
-// func  getContainerPort(client, kubernetes.Interface)(int error){
-	
-// }
