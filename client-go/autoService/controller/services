@@ -1,0 +1,125 @@
+Application Information	使用辅助管理权限便于交互式应用程序的运行。如果停止此服务，用户将无法使用辅助管理权限启动应用程序，而执行所需用户任务可能需要这些权限。	正在运行	手动(触发器启动)	本地系统
+AppX Deployment Service (AppXSVC)	为部署 Microsoft Store 应用程序提供基础结构支持。此服务根据需要启动，如果已禁用的 Microsoft Store 应用程序未部署到系统，此服务可能无法正常工作。	正在运行	手动(触发器启动)	本地系统
+AVCTP 服务	这是音频视频控制传输协议服务	正在运行	手动(触发器启动)	本地服务
+Background Tasks Infrastructure Service	控制哪些后台任务可以在系统上运行的 Windows 基础结构服务。	正在运行	自动	本地系统
+Base Filtering Engine	基本筛选引擎(BFE)是一种管理防火墙和 Internet 协议安全(IPsec)策略以及实施用户模式筛选的服务。停止或禁用 BFE 服务将大大降低系统的安全。还将造成 IPsec 管理和防火墙应用程序产生不可预知的行为。	正在运行	自动	本地服务
+BitLocker Drive Encryption Service	BDESVC 承载 BitLocker 驱动器加密服务。BitLocker 驱动器加密为操作系统提供安全启动保障，并为 OS、固定卷和可移动卷提供全卷加密功能。使用此服务，BitLocker 可以提示用户执行与已安装卷相关的各种操作，并自动解锁卷而无需用户交互。此外，它还会将恢复信息存储至 Active Directory (如果这种方法可用并且需要这样做)，并确保使用最新的恢复证书。停止或禁用该服务可以防止用户使用此功能。	正在运行	手动(触发器启动)	本地系统
+Check Point SSL Network Extender		正在运行	自动	本地系统
+Client License Service (ClipSVC)	提供对 Microsoft Store 的基础结构支持。此服务按需启动，并且如果禁用了此服务，则使用 Windows Store 购买的应用程序将无法正常运行。	正在运行	手动(触发器启动)	本地系统
+CNG Key Isolation	CNG 密钥隔离服务宿主在 LSA 进程中。如一般原则所要求，该服务为私钥和相关加密操作提供密钥进程隔离。该服务在与一般原则要求相一致的安全进程中存储和使用生存期长的密钥。	正在运行	手动(触发器启动)	本地系统
+COM+ Event System	支持系统事件通知服务 (SENS)，此服务为订阅的组件对象模型 (COM) 组件提供自动分布事件功能。如果停止此服务，SENS 将关闭，而且不能提供登录和注销通知。如果禁用此服务，显式依赖此服务的其他服务都将无法启动。	正在运行	自动	本地服务
+Connected User Experiences and Telemetry	已连接的用户体验和遥测服务所启用的功能支持应用程序中用户体验和连接的用户体验。此外，如果在“反馈和诊断”下启用诊断和使用情况隐私选项设置，则此服务可以根据事件来管理诊断和使用情况信息的收集和传输(用于改进 Windows 平台的体验和质量)。	正在运行	自动	本地系统
+Contact Data_aff02	为联系人数据编制索引以进行快速联系人搜索。如果停止或禁用此服务，你的搜索结果中可能会缺少联系人。	正在运行	手动	本地系统
+CoreMessaging	Manages communication between system components.	正在运行	自动	本地服务
+Credential Manager	为用户、应用程序和安全服务包提供凭据的安全存储和检索。	正在运行	手动	本地系统
+Cryptographic Services	提供三种管理服务: 编录数据库服务，用于确认 Windows 文件的签名和允许安装新程序；受保护的根服务，它从此计算机添加和删除受信任的根证书颁发机构的证书；自动根证书更新服务，用于从 Windows 更新中检索根证书和启用 SSL 等方案。如果此服务已停止，这些管理服务将无法正常运行。如果此服务已禁用，任何明确依赖它的服务将无法启动。	正在运行	自动网络服务
+Data Sharing Service	提供应用程序之间的数据代理。	正在运行	手动(触发器启动)	本地系统
+DCOM Server Process Launcher	DCOMLAUNCH 服务可启动 COM 和 DCOM 服务器，以响应对象激活请求。如果此服务被停用或禁用，则使用 COM 或 DCOM 的程序将无法正常工作。强烈建议你运行 DCOMLAUNCH 服务。	正在运行	自动	本地系统
+Device Association Service	在系统与有线或无线设备之间启用匹配。	正在运行	手动(触发器启动)	本地系统
+DHCP Client	为此计算机注册并更新 IP 地址。如果此服务停止，计算机将不能接收动态 IP 地址和 DNS 更新。如果此服务被禁用，所有明确依赖它的服务都将不能启动。	正在运行	自动本地服务
+Distributed Link Tracking Client	维护某个计算机内或某个网络中的计算机的 NTFS 文件之间的链接。	正在运行	自动	本地系统
+DNS Client	DNS 客户端服务(dnscache)缓存域名系统(DNS)名称并注册该计算机的完整计算机名。如果该服务被停止，将继续解析 DNS 名称。然而，将不缓存 DNS 名称的查询结果，且不注册计算机名。如果该服务被禁用，则任何明确依赖于它的服务都将无法启动。	正在运行	自动(触发器启动)	网络服务
+Dolby DAX API Service	Dolby DAX API Service is used by Dolby DAX applications to control Dolby Atmos components in the system.	正在运行	自动	本地系统
+Encrypting File System (EFS)	提供用于在 NTFS 文件系统卷上存储加密文件的核心文件加密技术。如果停止或禁用此服务，则应用程序将无法访问加密的文件。	正在运行	手动(触发器启动)	本地系统
+Fortemedia APO Control Service	Fortemedia APO Control Service	正在运行	自动	本地系统
+Geolocation Service	此服务将监视系统的当前位置并管理地理围栏(具有关联事件的地理位置)。如果你禁用此服务，应用程序将无法使用或接收有关地理位置或地理围栏的通知。	正在运行手动(触发器启动)	本地系统
+Human Interface Device Service	激活键盘、遥控器和其他多媒体设备上的热按钮并继续使用这些按钮。建议你让此服务一直运行。	正在运行	手动(触发器启动)	本地系统
+IKE and AuthIP IPsec Keying Modules	IKEEXT 服务托管 Internet 密钥交换(IKE)和身份验证 Internet 协议(AuthIP)键控模块。这些键控模块用于 Internet 协议安全(IPSec)中的身份验证和密钥交换。停止或禁用 IKEEXT 服务将禁用与对等计算机的 IKE/AuthIP 密钥交换。通常将 IPSec 配置为使用 IKE 或 AuthIP，因此停止或禁用 IKEEXT 服务将导致 IPSec 故障并且危及系统的安全。强烈建议运行 IKEEXT 服务。	正在运行	自动(触发器启动)	本地系统
+Intel(R) Audio Service		正在运行	自动	本地系统
+Intel(R) Dynamic Application Loader Host Interface Service	Intel(R) Dynamic Application Loader Host Interface Service - Allows applications to access the local Intel (R) DAL正在运行	自动	本地系统
+Intel(R) Dynamic Tuning service	Intel(R) Dynamic Tuning service	正在运行	自动	本地系统
+Intel(R) Graphics Command Center Service	Service for Intel(R) Graphics Command Center	正在运行	自动	本地系统
+Intel(R) HD Graphics Control Panel Service	Service for Intel(R) HD Graphics Control Panel	正在运行	自动	本地系统
+Intel(R) Management and Security Application Local Management Service	Intel(R) Management and Security Application Local Management Service - Provides OS-related Intel(R) ME functionality.	正在运行	自动	本地系统
+Intel? PROSet/Wireless Service	This service is part of the Intel? PROSet/Wireless WiFi Software	正在运行	手动	本地系统
+IP Helper	使用 IPv6 转换技术(6to4、ISATAP、端口代理和 Teredo)和 IP-HTTPS 提供隧道连接。如果停止该服务，则计算机将不具备这些技术提供的增强连接优势。	正在运行	自动本地系统
+IPsec Policy Agent	Internet 协议安全(IPsec)支持网络级别的对等身份验证、数据原始身份验证、数据完整性、数据机密性(加密)以及重播保护。此服务强制执行通过 IP 安全策略管理单元或命令行工具 "netsh ipsec" 创建的 IPsec 策略。停止此服务时，如果策略需要连接使用 IPsec，可能会遇到网络连接问题。同样，此服务停止时，Windows Defender 防火墙的远程管理也不再可用。	正在运行	手动(触发器启动)	网络服务
+KuGou Service	酷狗音乐后台服务	正在运行	自动	本地系统
+Lenovo Intelligent Sensing Service		正在运行	自动	本地系统
+Lenovo Notebook ITS Service		正在运行	自动	本地系统
+LenovoHotkeyService	响应设备和系统热键并提供相应的功能支持。	正在运行	自动	本地系统
+Local Session Manager	管理本地用户会话的核心 Windows 服务。停止或禁用此服务将导致系统不稳定。	正在运行	自动	本地系统
+LxssManager	LXSS Manager 服务支持运行本机 ELF 二进制文件。该服务提供在 Windows 上运行 ELF 二进制文件所需的基础结构。如果停止或禁用该服务，这些二进制文件将不再运行。	正在运行	手动	本地系统
+Microsoft Defender Antivirus Network Inspection Service	帮助防止针对网络协议中的已知和新发现的漏洞发起的入侵企图	正在运行	手动	本地服务
+Microsoft Defender Antivirus Service	帮助用户防止恶意软件及其他潜在的垃圾软件。	正在运行	自动	本地系统
+Microsoft Office 即点即用服务	?管理 Microsoft Office 及其相关更新的资源协调、后台下载和系统集成。使用任何 Microsoft Office 程序、初始下载安装以及所有后续更新期间需要运行此服务。?正在运行	自动	本地系统
+Microsoft Store 安装服务	为 Microsoft Store 提供基础结构支持。此服务按需启动，如被禁用，则安装将无法正常运行。	正在运行	手动	本地系统
+Network Connection Broker	允许 Windows 应用商店应用从 Internet 接收通知的代理连接。	正在运行	手动(触发器启动)	本地系统
+Network Connections	管理“网络和拨号连接”文件夹中对象，在其中你可以查看局域网和远程连接。	正在运行	手动	本地系统
+Network List Service	识别计算机已连接的网络，收集和存储这些网络的属性，并在更改这些属性时通知应用程序。	正在运行	手动	本地服务
+Network Location Awareness	收集和存储网络的配置信息，并在此信息被修改时向程序发出通知。如果停止此服务，则配置信息可能不可用；如果禁用此服务，则显式依赖此服务的所有服务都将无法启动。	正在运行	自动	网络服务
+Network Store Interface Service	此服务向用户模式客户端发送网络通知(例如，添加/删除接口等)。停止此服务将导致丢失网络连接。如果禁用此服务，则显式依赖此服务的所有其他服务都将无法启动。	正在运行	自动	本地服务
+NVIDIA Display Container LS	Container service for NVIDIA root features	正在运行	自动	本地系统
+OpenVPN Interactive Service		正在运行	自动	本地系统
+Plug and Play	使计算机在极少或没有用户输入的情况下能识别并适应硬件的更改。终止或禁用此服务会造成系统不稳定。	正在运行	手动	本地系统
+Power	管理电源策略和电源策略通知传递。	正在运行	自动	本地系统
+Print Spooler	该服务在后台执行打印作业并处理与打印机的交互。如果关闭该服务，则无法进行打印或查看打印机。	正在运行	自动	本地系统
+Program Compatibility Assistant Service	此服务为程序兼容性助手(PCA)提供支持。PCA 监视由用户安装和运行的程序，并检测已知兼容性问题。如果停止此服务，PCA 将无法正常运行。	正在运行手动	本地系统
+QPCore Service	腾讯安全服务	正在运行	自动	本地系统
+Realtek Audio Universal Service	Realtek Audio Universal Service	正在运行	自动	本地系统
+Remote Access Connection Manager	管理从这台计算机到 Internet 或其他远程网络的拨号和虚拟专用网络(VPN)连接。如果禁用该项服务，则明确依赖该服务的任何服务都将无法启动。	正在运行	自动	本地系统
+Remote Procedure Call (RPC)	RPCSS 服务是 COM 和 DCOM 服务器的服务控制管理器。它执行 COM 和 DCOM 服务器的对象激活请求、对象导出程序解析和分布式垃圾回收。如果此服务被停用或禁用，则使用 COM 或 DCOM 的程序将无法正常工作。强烈建议你运行 RPCSS 服务。	正在运行	自动	网络服务
+Remote Procedure Call (RPC) Locator	在 Windows 2003 和 Windows 的早期版本中，远程过程调用(RPC)定位器服务可管理 RPC 名称服务数据库。在 Windows Vista 和 Windows 的更新版本中，此服务不提供任何功能，但可用于应用程序兼容性。	正在运行	手动	网络服务
+Routing and Remote Access	在局域网以及广域网环境中为企业提供路由服务。	正在运行	自动	本地系统
+RPC Endpoint Mapper	解析 RPC 接口标识符以传输端点。如果此服务被停止或禁用，使用远程过程调用(RPC)服务的程序将无法正常运行。	正在运行	自动	网络服务
+Secondary Logon	在不同凭据下启用启动过程。如果此服务被停止，这种类型的登录访问将不可用。如果此服务被禁用，任何明确依赖它的服务都将不能启动。	正在运行	自动	本地系统
+Secure Socket Tunneling Protocol Service	提供使用 VPN 连接到远程计算机的安全套接字隧道协议(SSTP)的支持。如果该服务被禁用，则用户将无法使用 SSTP 访问远程服务器。	正在运行手动	本地服务
+Security Accounts Manager	启动此服务将向其他服务发出信号: 安全帐户管理器(SAM)已准备就绪，可以接受请求。禁用此服务将导致在 SAM 准备就绪时，无法通知系统中的其他服务，从而可能导致这些服务无法正确启动。不应禁用此服务。	正在运行	自动	本地系统
+Security Center	WSCSVC(Windows 安全中心)服务监视并报告计算机上的安全健康设置。健康设置包括防火墙(打开/关闭)、防病毒(打开/关闭/过期)、反间谍软件(打开/关闭/过期)、Windows 更新(自动/手动下载并安装更新)、用户帐户控制(打开/关闭)以及 Internet 设置(推荐/不推荐)。该服务为独立软件供应商提供 COM API 以便向安全中心服务注册并记录其产品的状态。安全和维护 UI 使用该服务在“安全和维护”控制面板中提供 systray 警报和安全健康状况的图形视图。网络访问保护(NAP)使用该服务向 NAP 网络策略服务器报告客户端的安全健康状况，以便进行网络隔离决策。该服务还提供一个公共 API，以允许外部客户以编程方式检索系统的聚合安全健康状况。	正在运行	自动(延迟启动)	本地服务
+Server	支持此计算机通过网络的文件、打印、和命名管道共享。如果服务停止，这些功能不可用。如果服务被禁用，任何直接依赖于此服务的服务将无法启动。	正在运行	自动(触发器启动)本地系统
+Shell Hardware Detection	为自动播放硬件事件提供通知。	正在运行	自动	本地系统
+SSDP Discovery	当发现了使用 SSDP 协议的网络设备和服务，如 UPnP 设备，同时还报告了运行在本地计算机上使用的 SSDP 设备和服务。如果停止此服务，基于 SSDP 的设备将不会被发现。如果禁用此服务，任何依赖此服务的服务都无法正常启动。	正在运行	手动	本地服务
+State Repository Service	为应用程序模型提供所需的基础结构支持。	正在运行	手动	本地系统
+Storage Service	为存储设置和外部存储扩展提供启用服务	正在运行	自动(延迟启动，触发器启动)	本地系统
+SysMain	维护和提高一段时间内的系统性能。	正在运行	自动	本地系统
+System Event Notification Service	监视系统事件并通知订户这些事件的 COM+ 事件系统。	正在运行	自动	本地系统
+System Events Broker	协调执行 WinRT 应用程序的后台作业。如果停止或禁用此服务，则可能不会触发后台作业。	正在运行	自动(触发器启动)	本地系统
+System Guard 运行时监视代理	监视并证明 Windows 平台的完整性。	正在运行	自动(延迟启动，触发器启动)	本地系统
+System Interface Foundation Service	The Lenovo System Interface Foundation Service provides interfaces for key features such as: system power management, system optimization, driver and application updates, and system settings to Lenovo applications including Lenovo Companion, Lenovo Settings and Lenovo ID. If you disable this service, Lenovo applications will not work properly.	正在运行	自动(延迟启动)	本地系统
+Task Scheduler	使用户可以在此计算机上配置和计划自动任务。此服务还托管多个 Windows 系统关键任务。如果此服务被停止或禁用，这些任务将无法在计划的时间运行。如果此服务被禁用，则明确依赖它的所有服务将无法启动。	正在运行	自动	本地系统
+TCP/IP NetBIOS Helper	提供 TCP/IP (NetBT) 服务上的 NetBIOS 和网络上客户端的 NetBIOS 名称解析的支持，从而使用户能够共享文件、打印和登录到网络。如果此服务被停用，这些功能可能不可用。如果此服务被禁用，任何依赖它的服务将无法启动。	正在运行	手动(触发器启动)	本地服务
+Themes	为用户提供使用主题管理的体验。	正在运行	自动	本地系统
+Time Broker	协调执行 WinRT 应用程序的后台作业。如果停止或禁用此服务，则可能不会触发后台作业。	正在运行	手动(触发器启动)	本地服务
+Touch Keyboard and Handwriting Panel Service	启用触摸键盘和手写面板笔和墨迹功能	正在运行	手动(触发器启动)	本地系统
+Udk 用户服务_aff02	Shell 组件服务	正在运行	手动	本地系统
+User Data Access_aff02	提供对结构化用户数据(包括联系人信息、日历、消息和其他内容)的应用访问。如果停止或禁用此服务，使用此数据的应用可能无法正常工作。	正在运行	手动	本地系统
+User Data Storage_aff02	处理结构化用户数据(包括联系人信息、日历、消息和其他内容)的存储。如果停止或禁用此服务，使用此数据的应用可能无法正常工作。	正在运行	手动	本地系统
+User Manager	用户管理器提供多用户交互所需要的运行时组件。如果停止此服务，某些应用程序可能无法正确运行。	正在运行	自动(触发器启动)	本地系统
+User Profile Service	此服务负责加载和卸载用户配置文件。如果已停止或禁用此服务，用户将无法再成功登录或注销，应用在获取用户数据时可能会出问题，而且为接收配置文件事件通知注册的组件将无法接收这些通知。	正在运行	自动	本地系统
+VMware Authorization Service	用于启动和访问虚拟机的授权及身份验证服务。	正在运行	自动	本地系统
+	正在运行	自动	本地系统
+	正在运行	自动	本地系统
+VMware USB Arbitration Service	Arbitration and enumeration of USB devices for virtual machines	正在运行	自动	本地系统
+VMware Workstation Server	用于虚拟机注册和管理的远程访问服务。	正在运行	自动	本地系统
+VNC Server	Enables VNC Viewer users to connect to and control this computer. To manage connectivity, configure the VNC Server application. Note that if this service is stopped, all VNC Viewer users will be disconnected and cannot connect until it is started again.	正在运行	自动	本地系统
+WebClient	使基于 Windows 的程序能创建、访问和修改基于 Internet 的文件。如果此服务被停止，这些功能将不可用。如果此服务被禁用，则明确依赖该服务的任何服务都将无法启动。	正在运行	手动(触发器启动)	本地服务
+Windows Audio	管理基于 Windows 的程序的音频。如果此服务被停止，音频设备和效果将不能正常工作。如果此服务被禁用，任何依赖它的服务将无法启动	正在运行	自动	本地服务
+Windows Audio Endpoint Builder	管理 Windows 音频服务的音频设备。如果停止了此服务，音频设备和效果将无法正常工作。如果禁用了此服务，任何明确依赖它的服务将无法启动	正在运行自动	本地系统
+Windows Biometric Service	Windows 生物识别服务使客户端应用程序能够捕获、比较、操纵和存储生物特征数据，而无需直接访问任何生物识别硬件或示例。该服务宿主在某个特权 SVCHOST 进程中。	正在运行	自动(触发器启动)	本地系统
+Windows Connection Manager	根据电脑当前可用的网络连接选项做出自动连接/断开连接决策，并根据“组策略”设置启用网络连接管理。	正在运行	自动(触发器启动)	本地服务
+Windows Defender Firewall	Windows Defender 防火墙通过阻止未授权用户通过 Internet 或网络访问你的计算机来帮助保护计算机。	正在运行	自动	本地服务
+Windows Event Log	此服务管理事件和事件日志。它支持日志记录事件、查询事件、订阅事件、归档事件日志以及管理事件元数据。它可以用 XML 和纯文本两种格式显示事件。停止该服务可能危及系统的安全性和可靠性。	正在运行	自动	本地服务
+Windows Font Cache Service	通过缓存常用字体数据优化应用程序的性能。如果尚未运行该服务，则应用程序将启动该服务。也可以禁用该服务，但是这样做会降低应用程序性能。	正在运行自动	本地服务
+Windows Image Acquisition (WIA)	为扫描仪和照相机提供图像采集服务	正在运行	自动	本地服务
+Windows Management Instrumentation	提供共同的界面和对象模式以便访问有关操作系统、设备、应用程序和服务的管理信息。如果此服务被终止，多数基于 Windows 的软件将无法正常运行。如果此服务被禁用，任何依赖它的服务将无法启动。	正在运行	自动	本地系统
+Windows Push Notifications User Service_aff02	此服务托管为本地通知和推送通知提供支持的 Windows 通知平台。支持的通知为磁贴、Toast 和 Raw。	正在运行	自动	本地系统
+Windows Search	为文件、电子邮件和其他内容提供内容索引、属性缓存和搜索结果。	正在运行	自动(延迟启动)	本地系统
+Windows Update	启用检测、下载和安装 Windows 和其他程序的更新。如果此服务被禁用，这台计算机的用户将无法使用 Windows 更新或其自动更新功能， 并且这些程序将无法使用 Windows 更新代理(WUA) API。	正在运行	手动(触发器启动)	本地系统
+Windows 安全中心服务	Windows 安全中心服务处理统一的设备保护和运行状况信息	正在运行	手动	本地系统
+Windows 推送通知系统服务	此服务在会话 0 中运行，并托管通知平台和连接提供程序(用于处理设备与 WNS 服务器之间的连接)。	正在运行	自动	本地系统
+Windows 许可证管理器服务	为 Microsoft Store 提供基础结构支持。此服务按需启动，如果禁用此服务，则通过 Microsoft Store 获得的内容将无法正常运行。	正在运行	手动(触发器启动)	本地服务
+WinHTTP Web Proxy Auto-Discovery Service	WinHTTP 实现了客户端 HTTP 堆栈并向开发人员提供 Win32 API 和 COM 自动化组件以供发送 HTTP 请求和接收响应。此外，通过执行 Web 代理自动发现(WPAD)协议，WinHTTP 还提供对自动发现代理服务器配置的支持。	正在运行	手动	本地服务
+WLAN AutoConfig	WLANSVC 服务提供配置、发现、连接、断开与 IEEE 802.11 标准定义的无线局域网(WLAN)的连接所需的逻辑。它还包含将计算机变成软件访问点的逻辑，以便其他设备或计算机可以使用支持它的 WLAN 适配器无线连接到计算机。停止或禁用 WLANSVC 服务将使得计算机上的所有 WLAN 适配器无法访问 Windows 网络连接 UI。强烈建议: 如果你的计算机具有 WLAN 适配器，则运行 WLANSVC服务。	正在运行	自动	本地系统
+WMI Performance Adapter	向网络上的客户端提供 Windows Management Instrumentation (WMI) 提供程序中的性能库信息。只有在激活了性能数据助手时，才会运行此服务。	正在运行	自动本地系统
+Workstation	使用 SMB 协议创建并维护客户端网络与远程服务器之间的连接。如果此服务已停止，这些连接将无法使用。如果此服务已禁用，任何明确依赖它的服务将无法启动。	正在运行自动	网络服务
+付款和 NFC/SE 管理器	管理付款和基于近场通信(NFC)的安全元件。	正在运行	手动(触发器启动)	本地服务
+更新 Orchestrator 服务	管理 Windows 更新。如果已停止，你的设备将无法下载和安装最新更新。	正在运行	自动(延迟启动)	本地系统
+功能访问管理器服务	提供设施，用于管理 UWP 应用对应用功能的访问权限以及检查应用的特定应用功能访问权限	正在运行	手动	本地系统
+剪贴板用户服务_aff02	此用户服务用于剪贴板方案	正在运行	手动	本地系统
+连接设备平台服务	此服务用于连接设备平台方案	正在运行	自动(延迟启动，触发器启动)	本地服务
+连接设备平台用户服务_aff02	此用户服务用于连接设备平台方案	正在运行	自动	本地系统
+数据使用量	网络数据使用量，流量上限，限制背景数据，按流量计费的网络。	正在运行	自动	本地服务
+同步主机_aff02	此服务将同步邮件、联系人、日历和各种其他用户数据。此服务没有运行时，依赖于此功能的邮件和其他应用程序将无法正常工作。	正在运行	自动(延迟启动)	本地系统
+无线电管理服务	无线电管理和飞行模式服务	正在运行	手动	本地服务
+显示策略服务	管理本地和远程显示器的连接和配置	正在运行	自动(延迟启动)	本地服务
+显示增强服务	用于管理显示增强(如亮度控制)的服务。	正在运行	手动(触发器启动)	本地系统
