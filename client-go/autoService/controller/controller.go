@@ -196,13 +196,13 @@ func (c *controller) syncDeployment(key string) error {
 	// 		return err
 	// 	}
 	// }
-	if containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports); containerPortLength == 0 && service != nil{
-		err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name+"-"+"auto-svc", metaV1.DeleteOptions{})
-		// if err != nil {
-		// 	return err
-		// }
-		return err  //这里直接return
-	}
+	// if containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports); containerPortLength == 0 && service != nil{
+	// 	err := c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name+"-"+"auto-svc", metaV1.DeleteOptions{})
+	// 	// if err != nil {
+	// 	// 	return err
+	// 	// }
+	// 	return err  //这里直接return
+	// }
 
 	// if created == "true" && errors.IsNotFound(err)  {
 	// 	if containerPortLength := len(deployment.Spec.Template.Spec.Containers[0].Ports); containerPortLength == 0 {
