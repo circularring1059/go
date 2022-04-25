@@ -246,25 +246,34 @@ func (c *controller) syncDeployment(key string) error {
 			 if err != nil {
 				 return err
 			 }
+		}else if containerPortLength >0 && strings.Compare(created, "true") {
+			err :=  c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name + "-" + "auto-svc", metaV1.DeleteOptions{})
+			if err != nil {
+				return err
+			}
+		}else {
+			return nil
+		}
+
+	}else {
+		if containerPortLength > 0 && strings.Compare(created, "true") == 0 && errors.IsNotFound(err) {
+			// 创建 service
+			svc := c.CreateService(deployment)
+			_, err := c.client.CoreV1().Services(namespacekey).Create(context.TODO(), svc, metaV1.CreateOptions{})
+			if err != nil {
+				return nil
+			}
 		}
 	}
 	
-	if containerPortLength > 0 && strings.Compare(created, "true") == 0 && errors.IsNotFound(err) {
-		// 创建 service
-		svc := c.CreateService(deployment)
-		_, err := c.client.CoreV1().Services(namespacekey).Create(context.TODO(), svc, metaV1.CreateOptions{})
-		if err != nil {
-			return nil
-		}
-	}
 
-	if containerPortLength >0 && strings.Compare(created, "true") == 0 && service != nil {
-		// 删除servie 产生 delete event  
-		err :=  c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name + "-" + "auto-svc", metaV1.DeleteOptions{})
-		if err != nil {
-			return err
-		}
-	}
+	// if containerPortLength >0 && strings.Compare(created, "true") == 0 && service != nil {
+	// 	// 删除servie 产生 delete event  
+	// 	err :=  c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name + "-" + "auto-svc", metaV1.DeleteOptions{})
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// }
 
 	return nil
 
