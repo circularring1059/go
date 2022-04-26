@@ -246,7 +246,7 @@ func (c *controller) syncDeployment(key string) error {
 			 if err != nil {
 				 return err
 			 }
-		}else if containerPortLength >0 && strings.Compare(created, "true") {
+		}else if containerPortLength >0 && strings.Compare(created, "true") == 0{
 			err :=  c.client.CoreV1().Services(namespacekey).Delete(context.TODO(), name + "-" + "auto-svc", metaV1.DeleteOptions{})
 			if err != nil {
 				return err
