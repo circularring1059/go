@@ -6,7 +6,7 @@ func main () {
 	fmt.Println("start job")
 	sl := []int{2,7,9}
 	fmt.Println(Solution(sl))  //[9 7 2]
-	fmt.Println(sl) //[9 7 2]
+	fmt.Println(sl) //[9 7 2]  //不是值拷贝？
 
 }
 
