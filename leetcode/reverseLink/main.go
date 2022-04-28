@@ -1,53 +1,57 @@
-package main 
+package main
 
 import "fmt"
 
-func main () {
+func main() {
 	fmt.Println("start job")
 	node1 := newNode(1)
 	node2 := newNode(2)
+	node3 := newNode(3)
+	node4 := newNode(4)
 	node1.node = node2
+	node2.node = node3
+	node3.node = node4
 	node1.travel()
-	// reverseLink1(node1)
-	// node2.travel()
+	reverseLink1(node1)
+	node4.travel()
 }
 
 type Node struct {
-	val interface{}
+	val  interface{}
 	node *Node
 }
 
-func newNode(i interface{}) *Node{
+func newNode(i interface{}) *Node {
 	return &Node{
-		val: i,
+		val:  i,
 		node: nil,
 	}
 }
 
-func (n *Node) travel(){
+func (n *Node) travel() {
 	node := n
-	for node != nil{
-		
+	for node != nil {
+
 		if node.node == nil {
 			fmt.Println(node.val, "-> nil")
-			return 
+			return
 		}
 		fmt.Print(node.val, "-> ")
 		node = node.node
 	}
 }
 
-func reverLink(n *Node) Node{
-	if n.node == nil{
+func reverseLink(n *Node) Node {
+	if n.node == nil {
 		return *n
-	}else{
+	} else {
 		//进行reverse 后进行遍历会多出这个最后面node的 0 值
 		// pre := &Node{
 		// 	val: 0,
 		//     node: nil,
 		// }
 		var pre *Node = nil
-		for n != nil{
+		for n != nil {
 			next_node := n.node
 			n.node = pre
 			pre = n
@@ -57,7 +61,7 @@ func reverLink(n *Node) Node{
 	}
 }
 
-func reverseLink1(n *Node) Node{
+func reverseLink1(n *Node) Node {
 	node := n
 	if node.node == nil {
 		return *node
@@ -71,9 +75,9 @@ func backtack(n *Node) Node {
 	node := n
 	if node.node == nil {
 		return *node
-	}else{
+	} else {
 		newNode := backtack(node.node)
-		node.node.node = node 
+		node.node.node = node
 		node.node = nil
 		return newNode
 	}
