@@ -224,7 +224,7 @@ func (L *Link) swap(x, y int) {
 		L.reverse()
 	} else {
 		if x > y {
-			x, y = y, x
+			x, y = y, x  //让小的先完成替换，后面大的替换后就直接return
 		}
 		x_val := L.index(x)
 		// y_val := L.index(y)
