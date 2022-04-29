@@ -68,18 +68,20 @@ func reverseLink(n *Node) Node {
 	}
 }
 
-func reverseLink1(n *Node) Node {
-	node := n
+func reverseLink1(node *Node) Node {
+	// node := n
 	if node.node == nil {
 		return *node
 	}
-	node = backtack(node)
-	return *node
+	// node = backtack(node)
+	// return *node
+
+	return *backtack(node)
 }
 
-func backtack(n *Node) *Node {
+func backtack(node *Node) *Node {
 	//到最后一个node
-	node := n
+	// node := n
 	if node.node == nil {
 		return node
 	} else {

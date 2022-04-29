@@ -125,8 +125,8 @@ func (L *Link) reverse1() {
 	L.head = cur
 }
 
-func backtack(N *Node) *Node {
-	node := N
+func backtack(node *Node) *Node {
+	// node := N
 	if node.node == nil {
 		return node
 	}
