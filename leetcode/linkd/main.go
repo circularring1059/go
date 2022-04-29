@@ -23,6 +23,8 @@ func main() {
 	link.insert(6, 9)
 	link.travel()
 	link.reverse1()
+	link.remove(4)
+	link.remove(2)
 	link.travel()
 	// fmt.Println("link lenght :", link.length())
 }
@@ -72,8 +74,14 @@ func (L *Link) length() int {
 func (L *Link) travel() {
 	cur := L.head
 	for cur != nil {
-		fmt.Println(cur.val)
-		cur = cur.node
+		if cur.node == nil {
+			fmt.Println(cur.val)
+			return
+		} else {
+			fmt.Print(cur.val, "->")
+			cur = cur.node
+		}
+
 	}
 }
 
@@ -134,4 +142,32 @@ func backtack(node *Node) *Node {
 	node.node.node = node
 	node.node = nil
 	return newNode
+}
+
+func (L *Link) remove(val interface{}) {
+	if L.head == nil {
+		return
+	}
+	if L.head.val == val {
+		if L.length() == 1 {
+			L.head = nil
+		} else {
+			L.head = L.head.node
+		}
+	}
+	cur := L.head
+	for cur.node != nil && cur.node.val != val {
+		cur = cur.node
+	}
+	if cur.node == nil {
+		return
+	}
+	cur.node = cur.node.node
+
+}
+
+func (L *Link) search (val interface{}) int {
+	//找到返回对应的第一个index,否则返回 -1
+	
+
 }
