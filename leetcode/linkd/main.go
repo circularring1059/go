@@ -30,6 +30,7 @@ func main() {
 	link.add(8)
 	link.travel()
 	link.swap(2, 0)
+	link.insert(29, 9)
 	link.travel()
 	link.sort()
 	link.travel()
@@ -222,41 +223,53 @@ func (L *Link) swap(x, y int) {
 	if L.length() == 2 {
 		L.reverse()
 	} else {
+		if x > y {
+			x, y = y, x
+		}
 		x_val := L.index(x)
-		y_val := L.index(y)
+		// y_val := L.index(y)
 		cur := L.head
 		// for count := 0; cur != nil; count++ {
 		for count := 0; count <= L.length()-1; count++ {
-			if y > x {
-				if count == x {
-					cur.val = y_val
-				}
-				if count == y {
-					cur.val = x_val
-					return
-				}
-				cur = cur.node
-			} else {
-				if count == y {
-					cur.val = x_val
-				}
-				if count == x {
-					cur.val = y_val
-					return
-				}
-				cur = cur.node
+			// if y > x {
+			// 	if count == x {
+			// 		cur.val = y_val
+			// 	}
+			// 	if count == y {
+			// 		cur.val = x_val
+			// 		return
+			// 	}
+			// 	cur = cur.node
+			// } else {
+			// 	if count == y {
+			// 		cur.val = x_val
+			// 	}
+			// 	if count == x {
+			// 		cur.val = y_val
+			// 		return
+			// 	}
+			// 	cur = cur.node
+			// }
+			if count == x {
+				cur.val = L.index(y)
 			}
+			if count == y {
+				cur.val = x_val
+				return
+			}
+			cur = cur.node
+
 		}
 	}
 }
 
-func (L *Link) sort(){
+func (L *Link) sort() {
 	if L.length() <= 1 {
 		return
 	}
-	for i := 0; i < L.length() - 1; i++ {
-		for j := 0;  j < L.length() - 1 -i; j ++ {
-			if L.index(j).(int)  >  L.index(j + 1).(int) {   //先这么写着
+	for i := 0; i < L.length()-1; i++ {
+		for j := 0; j < L.length()-1-i; j++ {
+			if L.index(j).(int) > L.index(j+1).(int) { //先这么写着
 				L.swap(j, j+1)
 			}
 		}
