@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+)
 
 func main() {
 	fmt.Println("start job")
@@ -12,8 +15,12 @@ func main() {
 	node2.node = node3
 	node3.node = node4
 	node1.travel()
-	reverseLink1(node1)
+	new_node := reverseLink1(node1)
 	node4.travel()
+	new_node.travel()
+	reverseLink(&new_node)
+	node1.travel()
+
 }
 
 type Node struct {
@@ -66,15 +73,15 @@ func reverseLink1(n *Node) Node {
 	if node.node == nil {
 		return *node
 	}
-	*node = backtack(node)
+	node = backtack(node)
 	return *node
 }
 
-func backtack(n *Node) Node {
+func backtack(n *Node) *Node {
 	//到最后一个node
 	node := n
 	if node.node == nil {
-		return *node
+		return node
 	} else {
 		newNode := backtack(node.node)
 		node.node.node = node
