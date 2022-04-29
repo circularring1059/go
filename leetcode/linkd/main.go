@@ -1,7 +1,6 @@
 package main
 
 import (
-	"container/list"
 	"fmt"
 )
 
@@ -21,6 +20,7 @@ func main() {
 	link.append(2)
 	link.append(3)
 	link.append(4)
+	fmt.Println("length:", link.length())
 	link.insert(6, 9)
 	link.travel()
 	link.reverse1()
@@ -29,6 +29,11 @@ func main() {
 	fmt.Println(link.search(1))
 	link.add(8)
 	link.travel()
+	link.swap(2, 0)
+	link.travel()
+	link.sort()
+	link.travel()
+
 	// fmt.Println("link lenght :", link.length())
 }
 
@@ -184,16 +189,15 @@ func (L *Link) search(val interface{}) int {
 	return -1
 }
 
-func (L *Link) add (val interface{}) {
+func (L *Link) add(val interface{}) {
 	//L.insert(val 0)
 	new_node := newNode(val)
 	new_node.node = L.head
 	L.head = new_node
 }
 
-
-func (L *Link) index (index int) interface{} {
-	if L.head == nil || index < 0 || index > L.length() -1 {
+func (L *Link) index(index int) interface{} {
+	if L.head == nil || index < 0 || index > L.length()-1 {
 		// panic("out of index")
 		return nil
 	}
@@ -202,22 +206,59 @@ func (L *Link) index (index int) interface{} {
 		if count == index {
 			return cur.val
 		}
-		cur = cur.node 
+		cur = cur.node
 	}
 	return nil
 }
 
+func (L *Link) swap(x, y int) {
+	if L.length() <= 1 {
+		return
+	}
+	if x == y {
+		return
+	}
 
-// func (L *Link) sort(){
-// 	if L.length() <= 1 {
-// 		return
-// 	}
-// 	for i := 0; i < L.length() - 1; i++ {
-// 		for j := 0;  j < L.length() - 1 -i; j ++ {
-// 			if L.index(j)  >  L.index(j + 1) {
-				
-// 			}
-// 		}
-// 	}
+	if L.length() == 2 {
+		L.reverse()
+	} else {
+		x_val := L.index(x)
+		y_val := L.index(y)
+		cur := L.head
+		// for count := 0; cur != nil; count++ {
+		for count := 0; count <= L.length()-1; count++ {
+			if y > x {
+				if count == x {
+					cur.val = y_val
+				}
+				if count == y {
+					cur.val = x_val
+					return
+				}
+				cur = cur.node
+			} else {
+				if count == y {
+					cur.val = x_val
+				}
+				if count == x {
+					cur.val = y_val
+					return
+				}
+				cur = cur.node
+			}
+		}
+	}
+}
 
-// }
+func (L *Link) sort(){
+	if L.length() <= 1 {
+		return
+	}
+	for i := 0; i < L.length() - 1; i++ {
+		for j := 0;  j < L.length() - 1 -i; j ++ {
+			if L.index(j).(int)  >  L.index(j + 1).(int) {   //先这么写着
+				L.swap(j, j+1)
+			}
+		}
+	}
+}
