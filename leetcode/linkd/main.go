@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/list"
 	"fmt"
 )
 
@@ -25,6 +26,8 @@ func main() {
 	link.reverse1()
 	link.remove(4)
 	link.remove(2)
+	fmt.Println(link.search(1))
+	link.add(8)
 	link.travel()
 	// fmt.Println("link lenght :", link.length())
 }
@@ -166,8 +169,55 @@ func (L *Link) remove(val interface{}) {
 
 }
 
-func (L *Link) search (val interface{}) int {
+func (L *Link) search(val interface{}) int {
 	//找到返回对应的第一个index,否则返回 -1
-	
-
+	// if L.head == nil {
+	// 	return -1
+	// }
+	cur := L.head
+	for count := 0; cur != nil; count++ {
+		if cur.val == val {
+			return count
+		}
+		cur = cur.node
+	}
+	return -1
 }
+
+func (L *Link) add (val interface{}) {
+	//L.insert(val 0)
+	new_node := newNode(val)
+	new_node.node = L.head
+	L.head = new_node
+}
+
+
+func (L *Link) index (index int) interface{} {
+	if L.head == nil || index < 0 || index > L.length() -1 {
+		// panic("out of index")
+		return nil
+	}
+	cur := L.head
+	for count := 0; cur != nil; count++ {
+		if count == index {
+			return cur.val
+		}
+		cur = cur.node 
+	}
+	return nil
+}
+
+
+// func (L *Link) sort(){
+// 	if L.length() <= 1 {
+// 		return
+// 	}
+// 	for i := 0; i < L.length() - 1; i++ {
+// 		for j := 0;  j < L.length() - 1 -i; j ++ {
+// 			if L.index(j)  >  L.index(j + 1) {
+				
+// 			}
+// 		}
+// 	}
+
+// }
