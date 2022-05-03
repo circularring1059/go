@@ -65,5 +65,8 @@ func main() {
 	fmt.Println(slice2)
 	changeSlice1(&slice2)
 	fmt.Println(slice2)
+	str1 := "dir"
+	str2 := "file"
+	fmt.Println(str1  + str2)
 
 }
