@@ -32,7 +32,7 @@ func main() {
 
 	//切片长度与容量
 	var slice4 = make([]int, 2, 5)                        //有两个元素(int 默认是0，现在可以放十个
-	fmt.Println(slice4)                                   // [0 0]
+	fmt.Println("slice4", slice4)                         // [0 0]
 	fmt.Printf("长度:%v 容量:%v\n", len(slice4), cap(slice4)) //长度:2 容量:5
 
 	//声明一个  slice5 == nil
@@ -44,4 +44,11 @@ func main() {
 
 	slice5[0] = 9898    //修改值
 	fmt.Println(slice5) //[9898]
+
+	var slice6 []int
+	slice7 := make([]int, 0, 0)
+	fmt.Println(len(slice6), len(slice7)) // 0 0
+	fmt.Println(slice6 == nil)            //true
+	fmt.Println(slice7 == nil)  //false
+
 }
