@@ -17,7 +17,7 @@ var count = 0
 func fib1(n int) int {
 	if n == 0 {
 		count++
-		return count
+		// return count
 	}
 	if n > 0 {
 		fib1(n - 1)
