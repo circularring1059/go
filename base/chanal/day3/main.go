@@ -33,4 +33,5 @@ func getData(ch chan string) {
 	for i := range ch { //  for range  可以自动的检测chanal  是否关闭
 		fmt.Println(i)
 	}
+	fmt.Println("channel is closed")
 }
