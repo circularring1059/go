@@ -41,11 +41,11 @@ func main() {
 
 func Solution(s []int) bool {
 	if len(s) <= 1 {
-		return false
+		return true
 	}
 
 	if s[0] == 0 {
-		return true
+		return false
 	}
 	max_jump := s[0]
 
