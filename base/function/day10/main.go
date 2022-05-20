@@ -20,4 +20,5 @@ func calc(x, y int) (func() int, func() int) {
 func main() {
 	add, sub := calc(3, 1)
 	fmt.Println(add(), sub()) // 4 2
+	fmt.Println(add(), sub()) // 4 2
 }

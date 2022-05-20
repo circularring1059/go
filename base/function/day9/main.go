@@ -25,7 +25,6 @@ func func1(a int) func() {
 		a++
 		fmt.Println(a)
 	}
-
 }
 
 func main() {

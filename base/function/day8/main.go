@@ -21,6 +21,8 @@ func main() {
 	c()
 	c()
 
+	fmt.Println("****")
+	
 	d := a(3)
 	d()
 	d()

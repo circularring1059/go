@@ -9,14 +9,14 @@ func f1() int {
 	defer func() {
 		x++
 	}()
-	return x
+	return x  //5
 }
 
 func f2() (x int) {
 	defer func() {
 		x++
 	}()
-	return 5
+	return 5   //6
 }
 
 func f3() (y int) {
@@ -24,13 +24,13 @@ func f3() (y int) {
 	defer func() {
 		x++
 	}()
-	return x
+	return x  //5
 }
 func f4() (x int) {
 	defer func(x int) {
 		x++
 	}(x)
-	return 5
+	return 5  //5
 }
 
 func f5() {
