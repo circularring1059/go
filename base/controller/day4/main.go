@@ -19,6 +19,11 @@ func main() {
 	slice2 := make([]int, 2, 10)
 	fmt.Println(slice2)
 	fmt.Println("*", binFind(slice1, 7))
+
+	map1 := make(map[int]int, 1)
+	fmt.Println(map1)
+	map1[1] = 1
+	fmt.Println(map1)
 }
 
 func bubbling(nums []int) {
