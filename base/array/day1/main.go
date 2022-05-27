@@ -34,8 +34,8 @@ func main() {
 	fmt.Println(array5)                             //[1 3 5 7 9]
 	fmt.Printf("%v %v\n", len(array5), cap(array5)) //5 5
 
-	var array6 = [5]int{0: 2, 1: 3, 2: 10, 3: 100, 4: 7}
-	fmt.Println(array6)
+	var array6 = [5]int{0: 2, 1: 3, 2: 10, 3: 100, 4: 7, }
+	fmt.Println("array6", array6)
 	sum := 0
 	for _, v := range array6 {
 		sum = sum + v
