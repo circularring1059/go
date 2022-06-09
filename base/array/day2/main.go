@@ -49,6 +49,9 @@ func main() {
 	slice7 := make([]int, 0, 0)
 	fmt.Println(len(slice6), len(slice7)) // 0 0
 	fmt.Println(slice6 == nil)            //true
-	fmt.Println(slice7 == nil)  //false
+	fmt.Println(slice7 == nil)            //false
+
+	slice8 := make([]int,7)
+	fmt.Println(slice8, len(slice8), cap(slice8))
 
 }
