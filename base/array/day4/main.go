@@ -72,7 +72,7 @@ func main() {
 	fmt.Println(slice7)
 	fmt.Println(array11) //[1 3 4 5 6 7 8 9 9]
 
-	slice8 := []int{1, 3, 4, 2, 7, 4, 9}
+	slice8 := []int{1, 3, 4, 2,}
 	sort.Ints(slice8)
 	fmt.Println(slice8)
 	reverseSlice(slice8)
@@ -84,5 +84,6 @@ func reverseSlice(s []int) {
 	for i := len(s)/2 - 1; i >= 0; i-- {
 		opp := len(s) - i - 1
 		s[opp], s[i] = s[i], s[opp]
+		fmt.Println("*", s)
 	}
 }

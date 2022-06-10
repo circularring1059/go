@@ -75,9 +75,14 @@ func main() {
 		fmt.Println(slice1)
 	}
 
-	map6 := make(map[int]int, 0)
-	map6[1] = 1
-	fmt.Println(map6)
+	for _, v := range slice1{
+		fmt.Println(v, map5[v])
+	}
+
+	// map6 := make(map[int]int, 0)
+	// map6[1] = 1
+	// fmt.Println(map6)
+	
 }
 
 func changeMap(m map[int]int) {
