@@ -60,4 +60,14 @@ func main() {
 
 	map4 := map[int]int{1: 1, 2: 2}
 	fmt.Println(map4)
+	for k, v := range map4 {
+		fmt.Println(k, v)
+	}
+	changeMap(map4)
+	fmt.Println(map4)  //引用传递  值改变
+}
+
+func changeMap(m map[int]int) {
+	m[1] = 11
+	fmt.Println(m)
 }
