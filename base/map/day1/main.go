@@ -65,6 +65,19 @@ func main() {
 	}
 	changeMap(map4)
 	fmt.Println(map4)  //引用传递  值改变
+
+	map5 := map[int]int{1:1, 2:2, 3:3, 4:4}
+	fmt.Println(len(map5))
+	slice1 := make([]int, 0)
+	for k, _:= range map5{
+		fmt.Println(k, v)
+		slice1 = append(slice1, k)
+		fmt.Println(slice1)
+	}
+
+	map6 := make(map[int]int, 0)
+	map6[1] = 1
+	fmt.Println(map6)
 }
 
 func changeMap(m map[int]int) {
