@@ -51,7 +51,22 @@ func main() {
 	fmt.Println(slice6 == nil)            //true
 	fmt.Println(slice7 == nil)            //false
 
-	slice8 := make([]int,7)
+	slice8 := make([]int, 7)
 	fmt.Println(slice8, len(slice8), cap(slice8))
+
+	var slice9 []int
+	fmt.Println(len(slice9), cap(slice9))
+	if slice9 == nil {
+		fmt.Println("ok")
+	}
+
+	slice10 := make([]int, 0)
+	if slice10 == nil {
+		fmt.Println("slice10 == nil")
+	} else if slice9 != nil {
+		fmt.Println("ok")
+	}else {
+		fmt.Println("nothing")
+	}
 
 }
