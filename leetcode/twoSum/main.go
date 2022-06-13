@@ -4,8 +4,9 @@ import "fmt"
 
 func main() {
 	fmt.Println("study")
-	var sl = []int{1, 2, 4}
-	fmt.Println(twoSun1(sl, 3))
+	var sl = []int{1, 2, 4, 5}
+	fmt.Println(twoSun1(sl, 6))
+	fmt.Println(twoSun1(sl, 6))
 }
 
 func twoSun(nums []int, target int) [][]int {
