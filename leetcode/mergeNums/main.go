@@ -13,8 +13,8 @@ func merge(nums [][]int) [][]int {
 	sortNums(nums)
 	sl := make([][]int, 0)
 	start, end := nums[0][0], nums[0][1]
-	for i := 0; i < len(nums); i++ {
-		if nums[i][0] < end {
+	for i := 1; i < len(nums); i++ {
+		if nums[i][0] <= end {
 			end = max(end, nums[i][1])
 		} else {
 			sl = append(sl, []int{start, end})
